@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { BASE_URL } from '../config';
 
 const Signup = () => {
 
@@ -46,7 +47,7 @@ const Signup = () => {
 
   //this function will check if the user exist or not using email.
   const checkUser = () => {
-    Axios.get(`http://10.0.2.2:5000/bikefinity/auth/checkUser/${email}`)
+    Axios.get(`${BASE_URL}/bikefinity/auth/checkUser/${email}`)
       .then((res) => {
         setLoading(false);
         if (res.data.status === true) {

@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { BASE_URL } from '../config';
 
 const Password = () => {
 
@@ -30,7 +31,7 @@ const Password = () => {
     }
 
     const registerUser = () => {
-        Axios.post('http://10.0.2.2:5000/bikefinity/auth/signup',
+        Axios.post(`${BASE_URL}/bikefinity/auth/signup`,
             {
                 name: route.params.name,
                 email: route.params.email,

@@ -20,6 +20,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { BASE_URL } from '../config';
 
 const PostAd = () => {
 
@@ -49,7 +50,7 @@ const PostAd = () => {
   const years = Array.from(new Array(43), (val, index) => currentYear - index);
 
   const postAd = () => {
-    Axios.post('http://10.0.2.2:5000/bikefinity/user/postAd',
+    Axios.post(`${BASE_URL}/bikefinity/user/postAd`,
       {
         title: adTitle,
         price: price,

@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LogIn } from '../redux/actions/authAction';
+import { BASE_URL } from '../config';
 
 const Login = () => {
 
@@ -41,7 +42,7 @@ const Login = () => {
   }
 
   const loginUser = () => {
-    Axios.post('http://10.0.2.2:5000/bikefinity/auth/login',
+    Axios.post(`${BASE_URL}/bikefinity/auth/login`,
       {
         email: email,
         password: password
