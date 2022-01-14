@@ -23,6 +23,7 @@ const Input = (props) => {
                 <TextInput
                     placeholder={props.name}
                     keyboardType={props.type}
+                    autoCapitalize={props.autoCapitalize}
                     defaultValue={props.defaultValue}
                     onChangeText={value => props.onChange(value)}
                     onBlur={props.onBlur}

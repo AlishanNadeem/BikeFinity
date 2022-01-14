@@ -154,6 +154,7 @@ const Login = () => {
             name="Enter your Email"
             icon="alternate-email"
             type="email-address"
+            autoCapitalize="none"
             value={email}
             onChange={onChangeEmail}
             onBlur={
