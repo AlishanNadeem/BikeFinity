@@ -25,7 +25,7 @@ exports.postAd = ((req, res, next) => {
 exports.getAds = ((req, res, next) => {
 
     const page = req.query.page
-    const adsPerPage = 6;
+    const adsPerPage = 10;
 
     Ads.aggregate([
         {
