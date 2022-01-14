@@ -29,7 +29,7 @@ const PostAd = () => {
   const [adTitle, setAdTitle] = useState("");
   const [price, setPrice] = useState("");
   const [year, setYear] = useState("2022");
-  const [make, model] = useState("");
+  const [make, setMake] = useState("");
   const [engine, setEngine] = useState("");
   const [kilometers, setKilometers] = useState("");
   const [condition, setCondition] = useState("New");
@@ -42,6 +42,7 @@ const PostAd = () => {
   const [emptyPrice, setEmptyPrice] = useState();
   const [emptyEngine, setEmptyEngine] = useState();
   const [emptyKilometers, setEmptyKilometers] = useState();
+  const [emptyLocation, setEmptyLocation] = useState();
   const [emptyDescription, setEmptyDescription] = useState();
 
   const [loading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ const PostAd = () => {
         engine: engine,
         kilometers: kilometers,
         condition: condition,
+        location: location,
         description: description
       })
       .then((res) => {
@@ -81,9 +83,10 @@ const PostAd = () => {
     checkInputField('year');
     checkInputField('engine');
     checkInputField('kilometers');
+    checkInputField('location');
     checkInputField('description');
     if (emptyAdTitle === false && emptyPrice === false && emptyEngine === false
-      && emptyKilometers === false && emptyDescription === false) {
+      && emptyKilometers === false && emptyDescription === false && emptyLocation === false) {
       setLoading(true);
       postAd();
     }
@@ -113,6 +116,11 @@ const PostAd = () => {
     else if (fieldName === 'kilometers') {
       if (kilometers.length === 0) {
         setEmptyKilometers(true)
+      }
+    }
+    else if (fieldName === 'location') {
+      if (location.length === 0) {
+        setEmptyLocation(true)
       }
     }
     else if (fieldName === 'description') {
@@ -333,27 +341,26 @@ const PostAd = () => {
         </View>
       </View>
       <View style={{ marginTop: 25 }}>
-        <Text style={{ color: 'black' }}>Ad Title</Text>
+        <Text style={{ color: 'black' }}>Location</Text>
         <View style={{ marginTop: 5 }}>
           <Input
-            name="Enter Title of Ad"
-            value={adTitle}
+            name="Enter Location"
+            value={location}
             onChange={
               (value) => {
-                setEmptyAdTitle(false);
-                setAdTitle(value)
+                setEmptyLocation(false);
+                setLocation(value)
               }
             }
             onBlur={
               () => {
-                checkInputField('adTitle')
+                checkInputField('location')
               }
             }
           />
         </View>
         <View style={styles.errorContainer}>
-          {emptyAdTitle ? <Text style={styles.errorLabel}>Title cannot be empty!</Text> : null}
-          {adTitle.length > 55 ? <Text style={styles.errorLabel}>Title could not exceed 55 characters.</Text> : null}
+          {emptyLocation ? <Text style={styles.errorLabel}>Location cannot be empty!</Text> : null}
         </View>
       </View>
       <View style={{ marginTop: 5 }}>
