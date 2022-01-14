@@ -1,0 +1,133 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FAB } from 'react-native-paper';
+import moment from 'moment';
+
+import Axios from 'axios';
+
+import { useSelector } from 'react-redux';
+
+const Marketplace = ({ navigation }) => {
+
+    const { token } = useSelector(state => state.auth);
+
+    const [refreshing, setRefreshing] = useState(false);
+    const [onEndReached, setOnEndReached] = useState(false);
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        getAds();
+    }, [page]);
+
+    const getAds = () => {
+        Axios.get(`http://10.0.2.2:5000/bikefinity/user/getAds?page=${page}`, {
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then((res) => {
+                const ads = res.data;
+                setData(data.concat(ads));
+                setOnEndReached(false);
+                setRefreshing(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    const whileOnEndReached = () => {
+        setOnEndReached(true);
+        setPage(page + 1);
+    }
+
+    const whileOnRefreshing = () => {
+        setRefreshing(true);
+        getAds();
+    }
+
+    const renderItem = ({ item }) => (
+        <View style={{ borderRadius: 8, flexDirection: 'column', width: '48%', backgroundColor: 'white', margin: 4, height: 350, padding: 5 }}>
+            <View style={{ flex: 0.5, backgroundColor: 'skyblue' }}>
+            </View>
+            <View style={{ flex: 0.5, padding: 5 }}>
+
+                <View style={{ flex: 0.2, flexDirection: 'row' }}>
+                    <View style={{ flex: 0.8 }}>
+                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Rs {item.price}</Text>
+                    </View>
+                    <View style={{ flex: 0.2, alignItems: 'center', }}>
+                        <Icon name='heart-outline' size={20} color='black' />
+                    </View>
+                </View>
+                <View style={{ flex: 0.5, }}>
+                    <Text style={{ color: 'black', fontSize: 16 }}>{item.title}</Text>
+                </View>
+                <View style={{ flex: 0.15, justifyContent: 'center' }}>
+                    <Text style={{ color: 'grey', fontSize: 12 }}>{item.year} | {item.location}</Text>
+                </View>
+                <View style={{ flex: 0.15, justifyContent: 'center' }}>
+                    <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('YYYY')}</Text>
+                </View>
+            </View>
+        </View>
+    );
+
+    const renderFooter = () => {
+        return (
+            <View style={styles.footer}>
+                {onEndReached ? (
+                    <ActivityIndicator
+                        size={30}
+                        color='#CA054D'
+                        style={{ marginLeft: 8 }} />
+                ) : null}
+            </View>
+        );
+    };
+
+    return (
+        <View style={{ flex: 1, alignItems: 'space-around' }}>
+            <FlatList
+                keyExtractor={(item) => item._id}
+                data={data}
+                renderItem={renderItem}
+                numColumns={2}
+                refreshing={refreshing}
+                onRefresh={whileOnRefreshing}
+                ListFooterComponent={renderFooter}
+                onEndReached={whileOnEndReached}
+                onEndReachedThreshold={0.5}
+            />
+            <FAB
+                style={styles.fab}
+                small
+                label="Post Ad"
+                icon="pen"
+                color="white"
+                onPress={() => {
+                    navigation.navigate("PostAd");
+                }}
+            />
+        </View>
+    );
+};
+
+const styles = new StyleSheet.create({
+    footer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40
+    },
+    fab: {
+        position: 'absolute',
+        margin: 20,
+        right: 0,
+        bottom: 0,
+        backgroundColor: '#011627',
+    },
+})
+
+export default Marketplace;
