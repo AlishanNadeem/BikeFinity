@@ -1,1 +1,1 @@
-export default BASE_URL = "server-deploy-bikefinity.herokuapp.com";
+export const BASE_URL = "http://server-deploy-bikefinity.herokuapp.com";

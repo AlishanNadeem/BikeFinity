@@ -8,6 +8,8 @@ import Axios from 'axios';
 
 import { useSelector } from 'react-redux';
 
+import { BASE_URL } from "../config";
+
 const Marketplace = ({ navigation }) => {
 
     const { token } = useSelector(state => state.auth);
@@ -22,7 +24,7 @@ const Marketplace = ({ navigation }) => {
     }, [page]);
 
     const getAds = () => {
-        Axios.get(`http://10.0.2.2:5000/bikefinity/user/getAds?page=${page}`, {
+        Axios.get(`${BASE_URL}/bikefinity/user/getAds?page=${page}`, {
             headers: {
                 'x-access-token': token
             }
