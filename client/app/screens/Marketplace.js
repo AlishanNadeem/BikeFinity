@@ -16,6 +16,7 @@ const Marketplace = ({ navigation }) => {
 
     const [refreshing, setRefreshing] = useState(false);
     const [onEndReached, setOnEndReached] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
 
@@ -34,6 +35,7 @@ const Marketplace = ({ navigation }) => {
                 setData(data.concat(ads));
                 setOnEndReached(false);
                 setRefreshing(false);
+                setIsLoaded(true);
             })
             .catch((error) => {
                 console.log(error);
@@ -103,29 +105,33 @@ const Marketplace = ({ navigation }) => {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'space-around' }}>
-            <FlatList
-                keyExtractor={(item) => item._id}
-                data={data}
-                renderItem={renderItem}
-                numColumns={2}
-                refreshing={refreshing}
-                onRefresh={whileOnRefreshing}
-                ListFooterComponent={renderFooter}
-                onEndReached={whileOnEndReached}
-                onEndReachedThreshold={0.5}
-            />
-            <FAB
-                style={styles.fab}
-                small
-                label="Post Ad"
-                icon="pen"
-                color="white"
-                onPress={() => {
-                    navigation.navigate("PostAd");
-                }}
-            />
-        </View>
+        isLoaded ?
+            <View style={{ flex: 1, alignItems: 'space-around' }}>
+                <FlatList
+                    keyExtractor={(item) => item._id}
+                    data={data}
+                    renderItem={renderItem}
+                    numColumns={2}
+                    refreshing={refreshing}
+                    onRefresh={whileOnRefreshing}
+                    ListFooterComponent={renderFooter}
+                    onEndReached={whileOnEndReached}
+                    onEndReachedThreshold={0.5}
+                />
+                <FAB
+                    style={styles.fab}
+                    small
+                    label="Post Ad"
+                    icon="pen"
+                    color="white"
+                    onPress={() => {
+                        navigation.navigate("PostAd");
+                    }}
+                />
+            </View> :
+            <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color='#CA054D' />
+            </View>
     );
 };
 
