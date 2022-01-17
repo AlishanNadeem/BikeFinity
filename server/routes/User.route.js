@@ -8,4 +8,6 @@ router.post('/postAd', user_controller.postAd);
 
 router.get('/getAds', user_controller.getAds);
 
+router.get('/getAd/:id', user_controller.getAd);
+
 module.exports = router;

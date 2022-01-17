@@ -45,3 +45,11 @@ exports.getAds = ((req, res, next) => {
         res.send(ads);
     });
 });
+
+exports.getAd = ((req, res, next) => {
+    Ads.findById({ _id: req.params.id }, (err, ad) => {
+        if (err) return next(err);
+
+        res.send(ad);
+    })
+});
