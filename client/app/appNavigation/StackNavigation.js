@@ -42,7 +42,7 @@ const StackNavigation = () => {
                 }} 
                 />
             <Stack.Screen name="PostAd" component={PostAd} options={{ headerShown: true, headerTitle: "Marketplace" }} />
-            <Stack.Screen name="ViewAd" component={ViewAd} />
+            <Stack.Screen name="ViewAd" component={ViewAd} options={{headerShown: true, headerTitle: "", headerTransparent: true}}/>
         </Stack.Navigator>
     );
 }
