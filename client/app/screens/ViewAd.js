@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change the name of object
 import Button from "../components/Button";
 
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 const ViewAd = () => {
+
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    useEffect(() => {
+        
+    }, [])
+
     return (
         <View style={{ flex: 1 }}>
             <View style={{ flex: 0.3, backgroundColor: 'skyblue' }}></View>
             <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 0.8 }}>
-                        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Rs 90,000</Text>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{route.params.id}</Text>
                     </View>
                     <View style={{ flex: 0.2, alignItems: 'flex-end', }}>
                         <Icon name='heart-outline' size={24} color='black' />
@@ -54,7 +64,7 @@ const ViewAd = () => {
                     </View>
                 </ScrollView>
             </View>
-            <View style={{ flex: 0.1, backgroundColor: 'grey' }}>
+            <View style={{ flex: 0.1, backgroundColor: 'blue' }}>
             </View>
         </View>
     );

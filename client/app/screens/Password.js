@@ -4,9 +4,11 @@ import Axios from 'axios';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { LogIn } from '../redux/actions/authAction';
 import { BASE_URL } from '../config';
 
 const Password = () => {
@@ -20,6 +22,7 @@ const Password = () => {
 
     const navigation = useNavigation();
     const route = useRoute();
+    const dispatch = useDispatch();
 
     const reset = () => {
         setPassword("");
@@ -51,7 +54,7 @@ const Password = () => {
     }
 
     const loginUser = () => {
-        Axios.post('http://10.0.2.2:5000/bikefinity/auth/login',
+        Axios.post(`${BASE_URL}/bikefinity/auth/login`,
             {
                 email: route.params.email,
                 password: password
@@ -59,12 +62,9 @@ const Password = () => {
             .then((res) => {
                 if (res.status === 200) {
                     setLoading(false);
-                    navigation.reset({
-                        index: 0,
-                        routes: [{
-                            name: 'MyTabs'
-                        }]
-                    })
+                    const token = res.data.token;
+                    const expiry = res.data.expiry
+                    dispatch(LogIn(token, expiry));
                 }
             })
             .catch((err) => {

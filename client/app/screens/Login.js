@@ -215,15 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const mapStateToProps = (state) => {
-//   const { auth } = state;
-//   return { auth };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   bindActionCreators({
-//     Login,
-//   }, dispatch);
-// };
-
 export default Login;
