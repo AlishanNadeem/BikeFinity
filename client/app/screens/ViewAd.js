@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
+import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change the name of object
 import Button from "../components/Button";
@@ -60,26 +61,71 @@ const ViewAd = () => {
                     </View>
                 </View>
                 <View style={{ flex: 0.45, padding: 10 }}>
-                    <ScrollView>
-                        <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>Details</Text>
-                        <View>
-
+                    <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>Details</Text>
+                    <ScrollView style={{ marginTop: 10 }}>
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Year</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.year}</Text>
+                            </View>
                         </View>
-                        <View>
-
+                        <Divider />
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Make</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.make}</Text>
+                            </View>
                         </View>
-                        <View>
-
+                        <Divider />
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Model</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.model}</Text>
+                            </View>
                         </View>
-                        <View>
-
+                        <Divider />
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Engine</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.engine} cc</Text>
+                            </View>
                         </View>
-                        <View>
-
+                        <Divider />
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Kilometers</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.kilometers} kms</Text>
+                            </View>
+                        </View>
+                        <Divider />
+                        <View style={styles.item}>
+                            <View style={{ flex: 0.3 }}>
+                                <Text style={styles.label}>Condition</Text>
+                            </View>
+                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+                                <Text style={styles.label}>{ad.condition}</Text>
+                            </View>
+                        </View>
+                        <Divider />
+                        <View style={styles.item}>
+                            <Text style={styles.label}>Description</Text>
+                        </View>
+                        <View style={styles.item}>
+                            <Text style={styles.label}>{ad.description}</Text>
                         </View>
                     </ScrollView>
                 </View>
-                <View style={{ flex: 0.1, backgroundColor: 'blue' }}>
+                <View style={{ flex: 0.1, backgroundColor: 'lightgrey' }}>
                 </View>
             </View> :
             <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
@@ -87,5 +133,21 @@ const ViewAd = () => {
             </View>
     );
 };
+
+const styles = StyleSheet.create({
+    item: {
+        flexDirection: 'row',
+        marginVertical: 15
+    },
+    label: {
+        color: 'black',
+        fontSize: 15,
+    },
+    seprator: {
+        height: 0.5,
+        backgroundColor: 'grey',
+        width: '100%'
+    }
+})
 
 export default ViewAd;
