@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 let adSchema = new Schema({
     title: { type: String },
-    price: { type: String },
-    year: { type: String },
+    price: { type: Number },
+    year: { type: Number },
     make: { type: String },
     model: { type: String },
-    engine: { type: String },
-    kilometers: { type: String },
+    engine: { type: Number },
+    kilometers: { type: Number },
     condition: { type: String },
     description: { type: String },
     location: { type: String, default: 'Karachi' },
