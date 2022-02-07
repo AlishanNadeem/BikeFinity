@@ -12,7 +12,8 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import Axios from 'axios';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,7 +36,8 @@ const PostAd = () => {
   const [condition, setCondition] = useState("New");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState();
+  const [selectedImage, setSelectedImage] = React.useState(false);
 
   //errors state
   const [emptyAdTitle, setEmptyAdTitle] = useState();
@@ -129,65 +131,7 @@ const PostAd = () => {
       }
     }
   }
-
-  const captureImage = async (type) => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1
-    };
-    let isCameraPermitted = await requestCameraPermission();
-    // let isStoragePermitted = await requestExternalWritePermission();
-    if (isCameraPermitted) {
-      launchCamera(options, (response) => {
-        console.log('Response = ', response);
-
-        if (response.didCancel) {
-          alert('User cancelled camera picker');
-          return;
-        } else if (response.errorCode == 'camera_unavailable') {
-          alert('Camera not available on device');
-          return;
-        } else if (response.errorCode == 'permission') {
-          alert('Permission not satisfied');
-          return;
-        } else if (response.errorCode == 'others') {
-          alert(response.errorMessage);
-          return;
-        }
-        console.log('base64 -> ' + response.base64);
-        console.log('uri -> ' + response.assets.uri);
-        console.log('width -> ' + response.width);
-        console.log('height -> ' + response.height);
-        console.log('fileSize -> ' + response.fileSize);
-        console.log('type -> ' + response.type);
-        console.log('fileName -> ' + response.fileName);
-        setImage(response);
-        console.log(image);
-      });
-    }
-  };
-
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs camera permission',
-          },
-        );
-        // If CAMERA Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else return true;
-  };
-
+  
   return (
     <KeyboardAwareScrollView style={{ flex: 1, padding: 15, backgroundColor: 'white' }} enableOnAndroid extraHeight={150}>
       <View>
@@ -390,19 +334,32 @@ const PostAd = () => {
       </View>
       <View style={{ marginTop: 5 }}>
         <Text style={{ color: 'black' }}>Choose Image</Text>
-        <View style={{ marginTop: 5, height: 200, borderWidth: 1, borderRadius: 10 }}>
-          <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} onPress={() => { captureImage('photo') }}>
+        <View style={{ marginTop: 5, height: 400, borderWidth: 1, borderRadius: 10 }}>
+          <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            onPress={() => {
+              ImagePicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true,
+                multiple: true
+              }).then(images => {
+                console.log(images);
+                console.log(images[0].path)
+                setImage(images[0].path)
+                setSelectedImage(true)
+              }).catch(error => {
+                console.log(error)
+              })
+            }}
+          >
             <View>
-              <Text>Choose Images</Text>
+              {
+                selectedImage ?
+                  <Image source={{ uri: image }} style={{ width: 300, height: 300, borderRadius: 20 }} /> :
+                  <Text>Choose Images</Text>
+              }
             </View>
           </TouchableOpacity>
-        </View>
-      </View>
-      <View style={{ marginTop: 5 }}>
-        <Text style={{ color: 'black' }}>Image</Text>
-        <View style={{ marginTop: 5, height: 200, borderWidth: 1, borderRadius: 10 }}>
-          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200, margin: 5 }} />
-          <Text>Hellow {image.uri}</Text>
         </View>
       </View>
       <View style={{ marginTop: 10, height: 60, alignItems: 'flex-end', justifyContent: 'center' }}>
