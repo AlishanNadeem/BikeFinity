@@ -9,7 +9,7 @@ exports.getAllBikes = ((req, res, next) => {
 });
 
 exports.getBikeMake = ((req, res, next) => {
-    Bike.find().distinct('make', (err, make) => {
+    Bike.distinct("make", (err, make) => {
         if(err) return next(err);
 
         res.send(make);
