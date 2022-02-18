@@ -14,4 +14,24 @@ exports.getBikeMake = ((req, res, next) => {
 
         res.send(make);
     })
-})
+});
+
+exports.getBikeModel = ((req, res, next) => {
+    Bike.aggregate([
+        {
+            $match : {
+                make: req.params.make
+            }
+        },
+        {
+            $project : {
+                "model" : 1,
+                "_id" : 0
+            }
+        }
+    ], (err, models) => {
+        if(err) return next(err);
+
+        res.send(models);
+    })
+});
