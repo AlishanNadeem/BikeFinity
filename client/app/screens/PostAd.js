@@ -6,13 +6,10 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  Platform,
-  PermissionsAndroid
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import Axios from 'axios';
-// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { useNavigation } from '@react-navigation/native';
@@ -131,7 +128,7 @@ const PostAd = () => {
       }
     }
   }
-  
+
   return (
     <KeyboardAwareScrollView style={{ flex: 1, padding: 15, backgroundColor: 'white' }} enableOnAndroid extraHeight={150}>
       <View>
