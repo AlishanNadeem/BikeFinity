@@ -21,15 +21,16 @@ const Calculator = () => {
     const navigation = useNavigation();
 
     const [make, setMake] = useState([]);
-    const [model, setModel] = useState([]);
     const [selectedMake, setSelectedMake] = useState("");
     const [selectedModel, setSelectedModel] = useState("");
+    const [bikeDetails, setBikeDetails] = useState([]);
+    const [engine, setEngine] = useState();
     const [year, setYear] = useState("2022");
-    const [engine, setEngine] = useState("");
     const [kilometers, setKilometers] = useState("");
 
     //errors state
-    const [emptyEngine, setEmptyEngine] = useState();
+    const [emptyMake, setEmptyMake] = useState();
+    const [emptyModel, setEmptyModel] = useState();
     const [emptyKilometers, setEmptyKilometers] = useState();
 
     const [loading, setLoading] = useState(false);
@@ -47,17 +48,40 @@ const Calculator = () => {
             })
     }, []);
 
-    const onClickPost = () => {
-        checkInputField('year');
-        checkInputField('kilometers');
-        // if (emptyAdTitle === false && emptyPrice === false && emptyEngine === false
-        //     && emptyKilometers === false) {
-        //     setLoading(true);
-        // }
+    //getting bike details according to make
+    const getBikeDetails = (value) => {
+        Axios.get(`${BASE_URL}/bikefinity/bike/model/${value}`)
+            .then((res) => {
+                // console.log(res.data)
+                setBikeDetails(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const onClickCalculate = () => {
+        checkInputField('make')
+        checkInputField('model')
+        checkInputField('year')
+        checkInputField('kilometers')
+        if (emptyMake === false && emptyModel === false && emptyKilometers === false) {
+            console.log(selectedMake + selectedModel + engine + year + kilometers)
+        }
     }
 
     const checkInputField = (fieldName) => {
-        if (fieldName === 'year') {
+        if (fieldName === 'make') {
+            if (selectedMake.length === 0) {
+                setEmptyMake(true)
+            }
+        }
+        else if (fieldName === 'model') {
+            if (selectedModel.length === 0) {
+                setEmptyModel(true)
+            }
+        }
+        else if (fieldName === 'year') {
             if (year.length === 0) {
                 setEmptyYear(true)
             }
@@ -72,7 +96,7 @@ const Calculator = () => {
     return (
         <KeyboardAwareScrollView style={{ flex: 1, padding: 15, backgroundColor: 'white' }} enableOnAndroid extraHeight={150}>
             <View>
-                <Text style={{ fontSize: 30, color: 'black', fontWeight: 'bold' }}>Calculate your bike price</Text>
+                <Text style={{ fontSize: 30, color: 'black', fontWeight: 'bold' }}>Calculate your Bike Price</Text>
             </View>
             <View style={{ marginTop: 10 }}>
                 <Text style={{ color: 'black' }}>You can estimate your current bike price. Note that once you will fill all the parameters then tap on calculates</Text>
@@ -83,10 +107,21 @@ const Calculator = () => {
                     <Picker
                         mode="dialog"
                         selectedValue={selectedMake}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setSelectedMake(itemValue)
-                        }
-                        style={{}}
+                        onValueChange={(itemValue, itemIndex) => {
+                            if (itemIndex === 0) {
+                                setEmptyMake(true);
+                                setSelectedMake("");
+                                setSelectedModel("");
+                                setBikeDetails([]);
+                                setEngine();
+                            } else {
+                                setBikeDetails([]);
+                                setEngine();
+                                setSelectedMake(itemValue);
+                                getBikeDetails(itemValue);
+                                setEmptyMake(false);
+                            }
+                        }}
                     >
                         <Picker.Item label='Select Make' value="" />
                         {
@@ -97,7 +132,7 @@ const Calculator = () => {
                     </Picker>
                 </View>
                 <View style={styles.errorContainer}>
-                    <Text>{selectedMake}</Text>
+                    {emptyMake ? <Text style={styles.errorLabel}>Please select make!</Text> : null}
                 </View>
             </View>
             <View style={{ marginTop: 5 }}>
@@ -106,28 +141,37 @@ const Calculator = () => {
                     <Picker
                         mode="dialog"
                         selectedValue={selectedModel}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setSelectedModel(itemValue)
-                        }
-                        style={{}}
+                        onValueChange={(itemValue, itemIndex) => {
+                            if (itemIndex === 0) {
+                                setEmptyModel(true);
+                                setSelectedModel("");
+                                setEngine();
+                            } else {
+                                setSelectedModel(itemValue);
+                                setEngine(bikeDetails[itemIndex - 1].engine);
+                                setEmptyModel(false);
+                            }
+                        }}
                     >
                         <Picker.Item label='Select Model' value="" />
                         {
-                            model.map((model, index) => {
-                                return (<Picker.Item label={model} value={model} key={index} />);
+                            bikeDetails.map((bike, index) => {
+                                return (<Picker.Item label={bike.model} value={bike.model} key={index} />);
                             })
                         }
                     </Picker>
                 </View>
                 <View style={styles.errorContainer}>
-                    <Text>{selectedMake}</Text>
+                    {emptyModel ? <Text style={styles.errorLabel}>Please select model!</Text> : null}
                 </View>
             </View>
             <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View style={{ flex: 0.45 }}>
                     <Text style={{ color: 'black' }}>Engine</Text>
                     <View style={{ marginTop: 5, borderBottomWidth: 1, height: 40, justifyContent: 'center' }}>
-                        <Text>Engine CC</Text>
+                        {
+                            engine ? <Text style={{fontSize: 16, color: 'black'}}>{engine}</Text> : <Text>Engine CC</Text>
+                        }
                     </View>
                     <View style={styles.errorContainer}>
                     </View>
@@ -172,12 +216,12 @@ const Calculator = () => {
                     />
                 </View>
                 <View style={styles.errorContainer}>
-                    <Text>{selectedMake}</Text>
+                    {emptyKilometers ? <Text style={styles.errorLabel}>Kms cannot be empty!</Text> : null}
                 </View>
             </View>
             <View style={{ marginTop: 10, height: 60, alignItems: 'center', justifyContent: 'center' }}>
                 <View style={{ width: '80%' }}>
-                    <TouchableOpacity onPress={onClickPost} disabled={loading ? true : false}>
+                    <TouchableOpacity onPress={onClickCalculate} disabled={loading ? true : false}>
                         <Button name="Calculate" color="blue" loading={loading} />
                     </TouchableOpacity>
                 </View>
