@@ -32,7 +32,7 @@ const ViewAd = () => {
 
     return (
         isLoaded ?
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <View style={{ flex: 0.3, backgroundColor: 'skyblue' }}></View>
                 <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row' }}>
@@ -60,7 +60,7 @@ const ViewAd = () => {
                         </View>
                     </View>
                 </View>
-                <View style={{ flex: 0.45, padding: 10 }}>
+                <View style={{ flex: 0.48, padding: 10 }}>
                     <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>Details</Text>
                     <ScrollView style={{ marginTop: 10 }}>
                         <View style={styles.item}>
@@ -125,7 +125,27 @@ const ViewAd = () => {
                         </View>
                     </ScrollView>
                 </View>
-                <View style={{ flex: 0.1, backgroundColor: 'lightgrey' }}>
+                <View style={{ flex: 0.07, backgroundColor: 'white', flexDirection: 'row' }}>
+                    <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }}>
+                            <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>
+                                <Icon name="phone" color='white' size={22} />
+                            </View>
+                            <View style={{ flex: 0.75, justifyContent: 'center' }}>
+                                <Text style={{ color: 'white', fontSize: 18 }}>Call</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5, justifyContent: 'center'}}>
+                            <View style={{ flex: 0.3, justifyContent: 'center' }}>
+                                <Icon name="message" color='white' size={22} />
+                            </View>
+                            <View style={{ flex: 0.7, justifyContent: 'center'}}>
+                                <Text style={{ color: 'white', fontSize: 18 }}>SMS</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </View> :
             <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
@@ -142,11 +162,6 @@ const styles = StyleSheet.create({
     label: {
         color: 'black',
         fontSize: 15,
-    },
-    seprator: {
-        height: 0.5,
-        backgroundColor: 'grey',
-        width: '100%'
     }
 })
 
