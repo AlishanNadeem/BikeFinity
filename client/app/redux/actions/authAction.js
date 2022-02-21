@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, VERIFY_USER } from './Types';
+import { LOG_IN, LOG_OUT } from './Types';
 
 const LogIn = (token, expiry) => {
     return {
