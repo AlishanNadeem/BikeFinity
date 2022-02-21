@@ -7,8 +7,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import Marketplace from '../screens/Marketplace';
 import Events from '../screens/Events';
 import Profile from '../screens/Profile';
-
-// import MarketplaceNavigation from './MarketplaceNavigation';
+import Calculator from '../screens/Calculator';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -36,7 +35,7 @@ const BottomTabNavigation = () => {
                         <Icon name="star-outline" color={color} size={26} />
                     ),
                 }} />
-            <Tab.Screen name="Calculator" component={Events}
+            <Tab.Screen name="Calculator" component={Calculator}
                 options={{
                     tabBarLabel: 'Calculator',
                     tabBarIcon: ({ color }) => (
