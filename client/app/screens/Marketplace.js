@@ -38,7 +38,14 @@ const Marketplace = ({ navigation }) => {
                 setIsLoaded(true);
             })
             .catch((error) => {
-                console.log(error);
+                let err = error.toJSON();
+                if (err.status === 500) {
+                    console.log("Token Expired. Login again.")
+                } else if (err.status === 401) {
+                    console.log("No Token Provided.")
+                } else {
+                    console.log(err);
+                }
             })
     }
 
