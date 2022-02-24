@@ -16,17 +16,4 @@ const LogOut = () => {
     }
 }
 
-// const VerifyUser = (expiry) => {
-//     var current_time = new Date().getTime() / 1000;
-//     if (current_time > expiry) {
-//         return {
-//             type: LOG_OUT
-//         }
-//     } else {
-//         return {
-//             type: VERIFY_USER
-//         }
-//     }
-// }
-
 export { LogIn, LogOut };

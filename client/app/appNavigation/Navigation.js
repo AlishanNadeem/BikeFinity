@@ -6,13 +6,11 @@ import StackNavigation from './StackNavigation';
 import AuthNavigation from './AuthNavigation';
 import RNBootSplash from "react-native-bootsplash";
 
-// import { VerifyUser } from '../redux/actions/authAction';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Navigation = () => {
 
-    const { loggedIn, expiry } = useSelector(state => state.auth);
+    const { loggedIn } = useSelector(state => state.auth);
 
     return (
         <NavigationContainer onReady={() => RNBootSplash.hide()}>
