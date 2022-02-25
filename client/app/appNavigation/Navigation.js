@@ -5,12 +5,29 @@ import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './StackNavigation';
 import AuthNavigation from './AuthNavigation';
 import RNBootSplash from "react-native-bootsplash";
+import { LogOut } from '../redux/actions/authAction';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Alert } from 'react-native';
 
 const Navigation = () => {
 
-    const { loggedIn } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const { loggedIn, expiry } = useSelector(state => state.auth);
+
+    useEffect(() => {
+        if (expiry !== null) {
+            if (expiry * 1000 < Date.now()) {
+                Alert.alert("Token Expired", "Please Login again to continue.",
+                    [
+                        {
+                            text: "OK",
+                            onPress: () => { dispatch(LogOut()) }
+                        }
+                    ]);
+            }
+        }
+    }, [])
 
     return (
         <NavigationContainer onReady={() => RNBootSplash.hide()}>
