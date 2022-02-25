@@ -8,6 +8,7 @@ import Marketplace from '../screens/Marketplace';
 import Events from '../screens/Events';
 import Profile from '../screens/Profile';
 import Calculator from '../screens/Calculator';
+import Review from '../screens/Review';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const BottomTabNavigation = () => {
                         <Icon name="emoji-events" color={color} size={26} />
                     ),
                 }} />
-            <Tab.Screen name="Reviews" component={Events}
+            <Tab.Screen name="Reviews" component={Review}
                 options={{
                     tabBarLabel: 'Reviews',
                     tabBarIcon: ({ color }) => (
