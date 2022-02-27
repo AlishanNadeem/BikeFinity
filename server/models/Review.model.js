@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 let reviewSchema = new Schema({
     review: { type: String },
-    bike: { type: Schema.Types.ObjectId },
-    postedBy: { type: String }
+    rating: { type: Number},
+    bikeId: { type: Schema.Types.ObjectId },
+    userId: { type: Schema.Types.ObjectId }
 });
 
 module.exports = mongoose.model('Review', reviewSchema);
