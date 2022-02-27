@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigation from './BottomTabNavigation';
 import PostAd from '../screens/PostAd';
 import ViewAd from '../screens/ViewAd';
+import ViewReview from '../screens/ViewReview';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ const StackNavigation = () => {
                 />
             <Stack.Screen name="PostAd" component={PostAd} options={{ headerShown: true, headerTitle: "Marketplace" }} />
             <Stack.Screen name="ViewAd" component={ViewAd} options={{headerShown: true, headerTitle: "", headerTransparent: true}}/>
+            <Stack.Screen name="ViewReview" component={ViewReview} options={{headerShown: true, headerTitle: "", headerTransparent: true}}/>
         </Stack.Navigator>
     );
 }

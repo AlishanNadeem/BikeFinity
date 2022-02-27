@@ -1,44 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Axios from 'axios';
 import StarRating from 'react-native-star-rating';
+
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Axios from 'axios';
 
 import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR, STAR_COLOR } from '../config';
 import Button from '../components/Button';
 
 const Review = () => {
 
+    const navigation = useNavigation();
+
     const [make, setMake] = useState([]);
     const [selectedMake, setSelectedMake] = useState('');
     const [selectedModel, setSelectedModel] = useState('');
     const [bikeDetails, setBikeDetails] = useState([]);
-    const [data, setData] = useState([
-        {
-            _id: 1,
-            name: "Yamaha",
-            model: 'YBR',
-            rating: 5
-        },
-        {
-            _id: 2,
-            name: "Yamaha",
-            model: 'YBR Z',
-            rating: 4.5
-        },
-        {
-            _id: 3,
-            name: "Yamaha",
-            model: 'YBR G',
-            rating: 4
-        },
-        {
-            _id: 4,
-            name: "Yamaha",
-            model: 'YBR',
-            rating: 4
-        },
-    ])
+    const [bikeId, setBikeId] = useState("");
+    const [data, setData] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
@@ -47,6 +27,17 @@ const Review = () => {
     const [emptyModel, setEmptyModel] = useState();
 
     useEffect(() => {
+        getBikeMake();
+        // Axios.get(`${BASE_URL}/bikefinity/bike/bikes`)
+        //     .then((res) => {
+        //         setData(res.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     })
+    }, []);
+
+    const getBikeMake = () => {
         Axios.get(`${BASE_URL}/bikefinity/bike/make`)
             .then((res) => {
                 setMake(res.data);
@@ -54,7 +45,7 @@ const Review = () => {
             .catch((err) => {
                 console.log(err);
             })
-    }, []);
+    }
 
     //getting bike details according to make
     const getBikeDetails = (value) => {
@@ -68,6 +59,12 @@ const Review = () => {
             })
     }
 
+    const onClickGo = () => {
+        navigation.navigate('ViewReview', {
+            id: bikeId
+        });
+    }
+
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={{ borderRadius: 8, flexDirection: 'column', width: 160, backgroundColor: 'white', margin: 4, height: 175, padding: 5 }}
@@ -78,17 +75,16 @@ const Review = () => {
             activeOpacity={1}
         >
             <View style={{ flex: 0.5, backgroundColor: 'skyblue' }}>
-                <Image source={require('../assets/YBR.jpeg')} style={{ height: 78, width: '100%' }} />
+                <Image source={{ uri: `data:image/jpeg;base64,${item.image}` }} style={{ height: 78, width: '100%' }} />
             </View>
             <View style={{ flex: 0.5, padding: 5 }}>
                 <Text style={{ color: 'black', marginTop: 10 }}>{item.name}</Text>
                 <Text style={{ color: 'black', marginTop: 0, fontWeight: 'bold' }}>{item.model}</Text>
-                <View style={{marginTop: 10, width: '70%'}}>
+                <View style={{ marginTop: 10, width: '70%' }}>
                     <StarRating
                         disabled={true}
                         maxStars={5}
                         rating={item.rating}
-                        // selectedStar={(rating) => this.onStarRatingPress(rating)}
                         starSize={18}
                         emptyStarColor={STAR_COLOR}
                         fullStarColor={STAR_COLOR}
@@ -115,8 +111,10 @@ const Review = () => {
                                 setSelectedMake("");
                                 setSelectedModel("");
                                 setBikeDetails([]);
+                                setBikeId("");
                             } else {
                                 setBikeDetails([]);
+                                setBikeId("");
                                 setSelectedMake(itemValue);
                                 getBikeDetails(itemValue);
                                 setEmptyMake(false);
@@ -145,8 +143,10 @@ const Review = () => {
                             if (itemIndex === 0) {
                                 setEmptyModel(true);
                                 setSelectedModel("");
+                                setBikeId("");
                             } else {
                                 setSelectedModel(itemValue);
+                                setBikeId(bikeDetails[itemIndex - 1]._id)
                                 setEmptyModel(false);
                             }
                         }}
@@ -165,7 +165,7 @@ const Review = () => {
             </View>
             <View style={{ marginTop: 5, height: 60, alignItems: 'flex-end', justifyContent: 'center' }}>
                 <View style={{ width: '30%' }}>
-                    <TouchableOpacity disabled={loading ? true : false}>
+                    <TouchableOpacity onPress={onClickGo} disabled={loading ? true : false}>
                         <Button name="Go" loading={loading} />
                     </TouchableOpacity>
                 </View>
