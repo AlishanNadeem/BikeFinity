@@ -8,6 +8,14 @@ exports.getAllBikes = ((req, res, next) => {
     });
 });
 
+exports.getBike = ((req, res, next) => {
+    Bike.findById({_id: req.params.id}, (err, bikes) => {
+        if(err) return next(err);
+
+        res.send(bikes);
+    });
+});
+
 exports.getBikeMake = ((req, res, next) => {
     Bike.distinct("make", (err, make) => {
         if(err) return next(err);
