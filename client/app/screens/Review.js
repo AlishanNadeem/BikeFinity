@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Axios from 'axios';
+import StarRating from 'react-native-star-rating';
 
-import { BASE_URL } from '../config';
+import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR, STAR_COLOR } from '../config';
 import Button from '../components/Button';
 
 const Review = () => {
@@ -15,19 +16,27 @@ const Review = () => {
     const [data, setData] = useState([
         {
             _id: 1,
-            name: "ali"
+            name: "Yamaha",
+            model: 'YBR',
+            rating: 5
         },
         {
             _id: 2,
-            name: "ali"
+            name: "Yamaha",
+            model: 'YBR Z',
+            rating: 4.5
         },
         {
             _id: 3,
-            name: "ali"
+            name: "Yamaha",
+            model: 'YBR G',
+            rating: 4
         },
         {
             _id: 4,
-            name: "ali"
+            name: "Yamaha",
+            model: 'YBR',
+            rating: 4
         },
     ])
 
@@ -69,9 +78,22 @@ const Review = () => {
             activeOpacity={1}
         >
             <View style={{ flex: 0.5, backgroundColor: 'skyblue' }}>
+                <Image source={require('../assets/YBR.jpeg')} style={{ height: 78, width: '100%' }} />
             </View>
             <View style={{ flex: 0.5, padding: 5 }}>
-
+                <Text style={{ color: 'black', marginTop: 10 }}>{item.name}</Text>
+                <Text style={{ color: 'black', marginTop: 0, fontWeight: 'bold' }}>{item.model}</Text>
+                <View style={{marginTop: 10, width: '70%'}}>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={item.rating}
+                        // selectedStar={(rating) => this.onStarRatingPress(rating)}
+                        starSize={18}
+                        emptyStarColor={STAR_COLOR}
+                        fullStarColor={STAR_COLOR}
+                    />
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -149,18 +171,13 @@ const Review = () => {
                 </View>
             </View>
             <View style={{ marginTop: 10 }}>
-                <Text style={{ color: 'black', fontSize: 24 }}>Top Rated Bikes</Text>
+                <Text style={{ color: PRIMARY_COLOR, fontSize: 24 }}>Top Rated Bikes</Text>
             </View>
             <View style={{ marginTop: 15, height: 185, backgroundColor: '#F7F7F7' }}>
                 <FlatList
                     keyExtractor={(item) => item._id}
                     data={data}
                     renderItem={renderItem}
-                    // refreshing={refreshing}
-                    // onRefresh={whileOnRefreshing}
-                    // ListFooterComponent={renderFooter}
-                    // onEndReached={whileOnEndReached}
-                    // onEndReachedThreshold={0.5}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 />
