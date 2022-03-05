@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import StarRating from 'react-native-star-rating';
 
@@ -20,7 +20,7 @@ const Review = () => {
     const [bikeId, setBikeId] = useState("");
     const [data, setData] = useState([]);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     //errors state
     const [emptyMake, setEmptyMake] = useState();
@@ -28,13 +28,14 @@ const Review = () => {
 
     useEffect(() => {
         getBikeMake();
-        // Axios.get(`${BASE_URL}/bikefinity/bike/bikes`)
-        //     .then((res) => {
-        //         setData(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     })
+        Axios.get(`${BASE_URL}/bikefinity/bike/topRatedBikes`)
+            .then((res) => {
+                setData(res.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }, []);
 
     const getBikeMake = () => {
@@ -59,9 +60,9 @@ const Review = () => {
             })
     }
 
-    const onClickGo = () => {
+    const onClickGo = (id) => {
         navigation.navigate('ViewReview', {
-            id: bikeId
+            id: id
         });
     }
 
@@ -69,22 +70,22 @@ const Review = () => {
         <TouchableOpacity
             style={{ borderRadius: 8, flexDirection: 'column', width: 160, backgroundColor: 'white', margin: 4, height: 175, padding: 5 }}
             onPress={() => {
-                onClickAd(item._id)
+                onClickGo(item._id)
             }}
             // delayPressIn={80}
             activeOpacity={1}
         >
             <View style={{ flex: 0.5, backgroundColor: 'skyblue' }}>
-                <Image source={{ uri: `data:image/jpeg;base64,${item.image}` }} style={{ height: 78, width: '100%' }} />
+                <Image source={{ uri: `${item.image}` }} style={{ height: 90, width: '100%' }} resizeMode='cover' />
             </View>
             <View style={{ flex: 0.5, padding: 5 }}>
-                <Text style={{ color: 'black', marginTop: 10 }}>{item.name}</Text>
+                <Text style={{ color: 'black', marginTop: 15 }}>{item.make}</Text>
                 <Text style={{ color: 'black', marginTop: 0, fontWeight: 'bold' }}>{item.model}</Text>
-                <View style={{ marginTop: 10, width: '70%' }}>
+                <View style={{ marginTop: 5, width: '70%' }}>
                     <StarRating
                         disabled={true}
                         maxStars={5}
-                        rating={item.rating}
+                        rating={item.averageRating}
                         starSize={18}
                         emptyStarColor={STAR_COLOR}
                         fullStarColor={STAR_COLOR}
@@ -165,22 +166,35 @@ const Review = () => {
             </View>
             <View style={{ marginTop: 5, height: 60, alignItems: 'flex-end', justifyContent: 'center' }}>
                 <View style={{ width: '30%' }}>
-                    <TouchableOpacity onPress={onClickGo} disabled={loading ? true : false}>
+                    <TouchableOpacity onPress={() => onClickGo(bikeId)} disabled={loading ? true : false}>
                         <Button name="Go" loading={loading} />
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 5 }}>
                 <Text style={{ color: PRIMARY_COLOR, fontSize: 24 }}>Top Rated Bikes</Text>
             </View>
-            <View style={{ marginTop: 15, height: 185, backgroundColor: '#F7F7F7' }}>
-                <FlatList
-                    keyExtractor={(item) => item._id}
-                    data={data}
-                    renderItem={renderItem}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                />
+            <View style={{ marginTop: 2 }}>
+                <Text>Here are some of the most rated bikes.</Text>
+            </View>
+            <View style={{ marginTop: 6, height: 185, backgroundColor: '#F7F7F7' }}>
+                {
+                    loading ?
+                        (
+                            <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size="large" color='#CA054D' />
+                            </View>
+                        ) :
+                        (
+                            <FlatList
+                                keyExtractor={(item) => item._id}
+                                data={data}
+                                renderItem={renderItem}
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        )
+                }
             </View>
         </View>
     );

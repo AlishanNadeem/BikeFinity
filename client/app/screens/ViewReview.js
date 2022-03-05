@@ -42,10 +42,10 @@ const ViewReview = () => {
         isLoaded ?
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <View style={{ flex: 0.3 }}>
-                    <Image source={{ uri: `data:image/jpeg;base64,${bike.image}` }} style={{ height: 210, width: '100%' }} />
+                    <Image source={{ uri: `${bike.image}` }} style={{ height: 210, width: '100%' }} />
                 </View>
                 <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
-                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{bike.make}</Text>
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{bike.model}</Text>
                     {/* <View>
                         <Text style={{ color: 'black', fontSize: 18 }}>{ad.title}</Text>
                     </View>
