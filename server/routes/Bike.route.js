@@ -11,4 +11,6 @@ router.get('/make', bike_controller.getBikeMake);
 
 router.get('/model/:make', bike_controller.getBikeModel);
 
+router.get('/topRatedBikes', bike_controller.getTopRatedBikes);
+
 module.exports = router;

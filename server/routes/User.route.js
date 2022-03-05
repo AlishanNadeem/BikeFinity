@@ -15,4 +15,6 @@ router.post('/postReview', AuthVerifier, review_controller.postReview);
 
 router.get('/getReviews/:id', review_controller.getReviews);
 
+router.get('/getTopRatedReviews', review_controller.getTopRatedReviews);
+
 module.exports = router;
