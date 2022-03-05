@@ -22,3 +22,11 @@ exports.getReviews = ((req, res, next) => {
         res.send(reviews);
     })
 });
+
+exports.getTopRatedReviews = ((req, res, next) => {
+    Review.find({}, (err, reviews) => {
+        if (err) return next(err);
+
+        res.send(reviews);
+    })
+});
