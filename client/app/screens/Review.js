@@ -20,7 +20,8 @@ const Review = () => {
     const [bikeId, setBikeId] = useState("");
     const [data, setData] = useState([]);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
     //errors state
     const [emptyMake, setEmptyMake] = useState();
@@ -28,14 +29,7 @@ const Review = () => {
 
     useEffect(() => {
         getBikeMake();
-        Axios.get(`${BASE_URL}/bikefinity/bike/topRatedBikes`)
-            .then((res) => {
-                setData(res.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+        getTopRatedBikes();
     }, []);
 
     const getBikeMake = () => {
@@ -60,7 +54,19 @@ const Review = () => {
             })
     }
 
+    const getTopRatedBikes = () => {
+        Axios.get(`${BASE_URL}/bikefinity/bike/topRatedBikes`)
+            .then((res) => {
+                setData(res.data);
+                setDataIsLoaded(true);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const onClickGo = (id) => {
+        setLoading(true);
         navigation.navigate('ViewReview', {
             id: id
         });
@@ -179,12 +185,7 @@ const Review = () => {
             </View>
             <View style={{ marginTop: 6, height: 185, backgroundColor: '#F7F7F7' }}>
                 {
-                    loading ?
-                        (
-                            <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-                                <ActivityIndicator size="large" color='#CA054D' />
-                            </View>
-                        ) :
+                    dataIsLoaded ?
                         (
                             <FlatList
                                 keyExtractor={(item) => item._id}
@@ -193,6 +194,11 @@ const Review = () => {
                                 horizontal={true}
                                 showsHorizontalScrollIndicator={false}
                             />
+                        ) :
+                        (
+                            <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size="large" color='#CA054D' />
+                            </View>
                         )
                 }
             </View>

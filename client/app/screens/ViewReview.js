@@ -4,11 +4,12 @@ import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change the name of object
 import Button from "../components/Button";
+import StarRating from 'react-native-star-rating';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Axios from "axios";
 
-import { BASE_URL } from "../config";
+import { BASE_URL, STAR_COLOR } from "../config";
 
 //need to loading app loader on start then ad fetched set to false
 const ViewReview = () => {
@@ -20,14 +21,7 @@ const ViewReview = () => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        Axios.get(`${BASE_URL}/bikefinity/bike/bike/${route.params.id}`)
-            .then((res) => {
-                setBike(res.data);
-                setIsLoaded(true);
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        getBike();
         // Axios.get(`${BASE_URL}/bikefinity/user/getReviews/${route.params.id}`)
         //     .then((res) => {
         //         setData(res.data);
@@ -36,7 +30,18 @@ const ViewReview = () => {
         //     .catch((error) => {
         //         console.log(error)
         //     })
-    }, [])
+    }, []);
+
+    const getBike = () => {
+        Axios.get(`${BASE_URL}/bikefinity/bike/bike/${route.params.id}`)
+            .then((res) => {
+                setBike(res.data);
+                setIsLoaded(true);
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     return (
         isLoaded ?
@@ -44,24 +49,31 @@ const ViewReview = () => {
                 <View style={{ flex: 0.3 }}>
                     <Image source={{ uri: `${bike.image}` }} style={{ height: 210, width: '100%' }} />
                 </View>
-                <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
-                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{bike.model}</Text>
-                    {/* <View>
-                        <Text style={{ color: 'black', fontSize: 18 }}>{ad.title}</Text>
-                    </View>
-                    <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 0.08 }}>
-                                <MIcon name="location-pin" size={20} />
-                            </View>
-                            <View style={{ flex: 0.7 }}>
-                                <Text>{ad.location}</Text>
-                            </View>
-                            <View style={{ flex: 0.22, alignItems: 'center' }}>
-                                <Text>10/12/2021</Text>
-                            </View>
+                <View style={{ flex: 0.1, padding: 10, backgroundColor: 'white', justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ flex: 0.5, backgroundColor: 'white' }}>
+                        <View>
+                            <Text style={{ color: 'black', fontSize: 18 }}>{bike.make}</Text>
                         </View>
-                    </View> */}
+                        <View>
+                            <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{bike.model}</Text>
+                        </View>
+                    </View>
+                    <View style={{ flex: 0.5, backgroundColor: 'white', alignItems: 'flex-end', }}>
+                        <View style={{ width: '60%', marginTop: 6 }}>
+                            <StarRating
+                                disabled={true}
+                                maxStars={5}
+                                rating={bike.averageRating}
+                                starSize={20}
+                                emptyStarColor={STAR_COLOR}
+                                fullStarColor={STAR_COLOR}
+                            />
+                        </View>
+                        <View style={{ marginTop: 2 }}>
+                            <Text style={{ color: 'grey', fontSize: 16, fontWeight: 'bold' }}>{bike.averageRating}/5</Text>
+                        </View>
+                    </View>
+
                 </View>
                 <View style={{ flex: 0.48, padding: 10 }}>
                 </View>
