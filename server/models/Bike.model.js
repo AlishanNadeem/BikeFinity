@@ -7,6 +7,7 @@ let bikeSchema = new Schema({
     engine: { type: Number },
     image: {type: String},
     type: {type: String},
+    counterReviews: {type: Number, default: 0},
     averageRating: {type: Number},
 });
 

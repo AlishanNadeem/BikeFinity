@@ -17,4 +17,7 @@ router.get('/getReviews/:id', review_controller.getReviews);
 
 router.get('/getTopRatedReviews', review_controller.getTopRatedReviews);
 
+//getting single review with respect to specific bike.
+router.get('/getUserReview/:id', AuthVerifier, review_controller.getUserReview);
+
 module.exports = router;
