@@ -11,7 +11,7 @@ const Input = (props) => {
     }
 
     return (
-        <View style={{ flexDirection: 'row', width: '100%', height: props.multiline ? 130 : 40, borderBottomWidth: 1, }}>
+        <View style={{ flexDirection: 'row', width: '100%', height: props.multiline ? props.numberOfLines * 25 : 40, borderBottomWidth: 1, }}>
             {
                 props.icon ?
                     <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }}>
