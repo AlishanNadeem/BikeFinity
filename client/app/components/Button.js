@@ -3,12 +3,18 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
 const Button = (props) => {
     return (
-        <View style={styles.btn}>
+        <View
+            style={[styles.btn,
+            {
+                backgroundColor: props.outlined ? 'white' : '#CA054D',
+                borderWidth: props.outlined ? 1 : 0,
+                borderColor: '#CA054D'
+            }]}>
             {
                 props.loading === true ?
                     <ActivityIndicator size={26} color="#FFFFFF" />
                     :
-                    <Text style={styles.btnTxt}>{props.name}</Text>
+                    <Text style={[styles.btnTxt, { color: props.outlined ? '#CA054D' : 'white' }]}>{props.name}</Text>
             }
         </View>
     );
