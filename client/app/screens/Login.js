@@ -74,9 +74,10 @@ const Login = () => {
   }
 
   const onClickLogin = () => {
+    setIncorrectPassword(false);
     checkInputField('email');
     checkInputField('password');
-    if (emptyEmail === false && emptyPassword === false && isEmail) {
+    if (emptyEmail === false && emptyPassword === false && isEmail && incorrectPassword === false) {
       setLoading(true);
       loginUser();
     }
