@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 import Axios from 'axios';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
@@ -9,16 +10,21 @@ import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LogIn } from '../redux/actions/authAction';
-import { BASE_URL } from '../config';
+import { BASE_URL, SECONDARY_COLOR } from '../config';
+import ProfilePicture from './ProfilePicture';
 
 const Password = () => {
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [profilePicture, setProfilePicture] = useState("");
+
     const [emptyPassword, setEmptyPassword] = useState();
     const [emptyConfirmPassword, setEmptyConfirmPassword] = useState();
     const [isMatched, setIsMatched] = useState();
     const [loading, setLoading] = useState(false);
+    const [profilePictureModalOpen, setProfilePictureModalOpen] = useState(false);
+    const [uploaded, setUploaded] = useState(false);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -40,7 +46,8 @@ const Password = () => {
                 email: route.params.email,
                 contactNumber: route.params.number,
                 location: route.params.location,
-                password: password
+                password: password,
+                profilePicture: profilePicture,
             })
             .then((res) => {
                 if (res.status === 200) {
@@ -92,6 +99,15 @@ const Password = () => {
         checkPasswordMatch(value);
     };
 
+    const handleProfilePictureModal = () => {
+        setProfilePictureModalOpen(!profilePictureModalOpen);
+    };
+
+    const profilePictureUploaded = (value, url) => {
+        setProfilePicture(url);
+        setUploaded(value);
+    }
+
     const checkInputField = (fieldName) => {
         if (fieldName === "password") {
             if (password.length === 0) {
@@ -125,6 +141,11 @@ const Password = () => {
 
     return (
         <KeyboardAwareScrollView style={{ flex: 1, padding: 20, backgroundColor: 'white' }} enableOnAndroid extraHeight={150}>
+            {
+                profilePictureModalOpen && (
+                    <ProfilePicture open={profilePictureModalOpen} handleProfilePictureModal={handleProfilePictureModal} uploaded={profilePictureUploaded} />
+                )
+            }
             <View>
                 <Text style={{ fontSize: 30, color: 'black', fontWeight: 'bold' }}>Continue..</Text>
             </View>
@@ -184,6 +205,24 @@ const Password = () => {
                     <TouchableOpacity onPress={onClickRegister} disabled={loading ? true : false}>
                         <Button name="Register" loading={loading} />
                     </TouchableOpacity>
+                </View>
+            </View>
+            <View style={{ marginTop: 60, flexDirection: 'row' }}>
+                <View style={{ flex: 0.5 }}>
+                    <Text style={{ color: 'black' }}>Want to add profile picture?</Text>
+                </View>
+                <View style={{ flex: 0.5, alignItems: 'flex-end' }}>
+                    {
+                        uploaded ?
+                            (
+                                <Icon name='check-circle' size={20} color={"green"} />
+                            ) :
+                            (
+                                <TouchableOpacity onPress={handleProfilePictureModal}>
+                                    <Icon name='camera-plus' size={20} color={SECONDARY_COLOR} />
+                                </TouchableOpacity>
+                            )
+                    }
                 </View>
             </View>
         </KeyboardAwareScrollView>

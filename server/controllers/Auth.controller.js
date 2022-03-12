@@ -42,6 +42,7 @@ exports.UserSignup = ((req, res, next) => {
         email: req.body.email,
         contactNumber: req.body.contactNumber,
         location: req.body.location,
+        profilePicture: req.body.profilePicture,
     });
 
     user.save((err) => {

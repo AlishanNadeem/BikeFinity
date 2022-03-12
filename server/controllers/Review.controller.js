@@ -19,7 +19,7 @@ exports.postReview = (async (req, res, next) => {
 
     console.log("Reviews #", counterReviews)
 
-    let averageRating = (bike.averageRating + review.rating) / counterReviews;
+    let averageRating = (bike.averageRating + review.rating) / 2;
 
     console.log("Avg Rat ", averageRating)
 
