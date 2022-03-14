@@ -20,4 +20,6 @@ router.get('/getTopRatedReviews', review_controller.getTopRatedReviews);
 //getting single review with respect to specific bike.
 router.get('/getUserReview/:id', AuthVerifier, review_controller.getUserReview);
 
+router.post('/deleteReview/:id', review_controller.deleteReview);
+
 module.exports = router;
