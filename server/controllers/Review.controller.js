@@ -19,10 +19,12 @@ exports.postReview = (async (req, res, next) => {
 
     console.log("Reviews #", counterReviews)
 
+    let averageRating = 0;
+
     if (bike.averageRating > 0) {
-        let averageRating = (bike.averageRating + review.rating) / 2;
+        averageRating = (bike.averageRating + review.rating) / 2;
     } else {
-        let averageRating = review.rating;
+        averageRating = review.rating;
     }
 
     console.log("Avg Rat ", averageRating)
