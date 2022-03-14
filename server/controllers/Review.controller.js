@@ -19,7 +19,11 @@ exports.postReview = (async (req, res, next) => {
 
     console.log("Reviews #", counterReviews)
 
-    let averageRating = (bike.averageRating + review.rating) / 2;
+    if (bike.averageRating > 0) {
+        let averageRating = (bike.averageRating + review.rating) / 2;
+    } else {
+        let averageRating = review.rating;
+    }
 
     console.log("Avg Rat ", averageRating)
 
@@ -40,19 +44,53 @@ exports.postReview = (async (req, res, next) => {
     });
 });
 
+exports.deleteReview = (async (req, res, next) => {
+
+    let review = await Review.findById(req.params.id);
+
+    let bike = await Bike.findById(review.bikeId);
+
+    let counterReviews = bike.counterReviews - 1;
+
+    let averageRating = (bike.averageRating * 2) - review.rating;
+
+    Bike.findByIdAndUpdate(review.bikeId,
+        {
+            $set: {
+                averageRating: averageRating,
+                counterReviews: counterReviews
+            }
+        }, (err) => {
+            if (err) return next(err);
+        });
+
+    Review.findByIdAndDelete(req.params.id, (err) => {
+        if (err) return next(err);
+
+        res.send({
+            status: 200,
+            msg: "Review deleted successfully"
+        });
+    });
+
+})
+
 exports.getReviews = ((req, res, next) => {
 
-    // Review.findOne({bikeId: req.params.id}, (err, review) => {
-    //     if(err) return next(err);
-
-    //     res.send(review);
-    // })
+    const page = req.query.page;
+    const adsPerPage = 3;
 
     Review.aggregate([
         {
             $match: {
                 bikeId: mongoose.Types.ObjectId(req.params.id)
             }
+        },
+        {
+            $skip: (page - 1) * adsPerPage
+        },
+        {
+            $limit: adsPerPage
         },
         {
             $lookup: {
