@@ -83,7 +83,7 @@ const Review = () => {
             // delayPressIn={80}
             activeOpacity={1}
         >
-            <View style={{ flex: 0.6, backgroundColor: 'skyblue' }}>
+            <View style={{ flex: 0.6 }}>
                 <Image source={{ uri: `${item.image}` }} style={{ flex: 1, width: '100%' }} resizeMode='cover' />
             </View>
             <View style={{ flex: 0.4, padding: 5, justifyContent: 'space-evenly' }}>
