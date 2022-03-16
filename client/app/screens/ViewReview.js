@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, Image, FlatList, Modal } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
 import { FAB } from 'react-native-paper';
+import moment from 'moment';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Axios from "axios";
@@ -24,7 +25,7 @@ const ViewReview = () => {
     const { token } = useSelector(state => state.auth);
 
     const [bike, setBike] = useState({});
-    const [page, setPage] = useState();
+    const [page, setPage] = useState(1);
 
     //errors states
     const [emptyReview, setEmptyReview] = useState();
@@ -38,13 +39,16 @@ const ViewReview = () => {
     useEffect(() => {
         getBike();
         getReviews();
-    }, [isFocused]);
+    }, [page]);
+
+    // useEffect(() => {
+    //     getReviews();
+    // }, [page]);
 
     const getBike = () => {
         Axios.get(`${BASE_URL}/bikefinity/bike/bike/${route.params.id}`)
             .then((res) => {
                 setBike(res.data);
-                setIsLoaded(true);
             })
             .catch((error) => {
                 console.log(error)
@@ -52,11 +56,17 @@ const ViewReview = () => {
     }
 
     const getReviews = () => {
-        Axios.get(`${BASE_URL}/bikefinity/user/getReviews/${route.params.id}`)
+        Axios.get(`${BASE_URL}/bikefinity/user/getReviews/${route.params.id}?page=${page}`)
             .then((res) => {
-                // console.log(res.data[0].user[0])
-                setData(res.data);
-                setIsLoaded(true);
+                const reviews = res.data;
+                if (reviews.length > 0) {
+                    setData(data.concat(reviews));
+                    setOnEndReached(false);
+                    setIsLoaded(true);
+                } else {
+                    setOnEndReached(false);
+                    setIsLoaded(true);
+                }
             })
             .catch((error) => {
                 console.log(error)
@@ -64,8 +74,9 @@ const ViewReview = () => {
     }
 
     const whileOnEndReached = () => {
+        console.log("reached")
         setOnEndReached(true);
-        // setPage(page + 1);
+        setPage(page + 1);
     }
 
     const handleSubmitReview = () => {
@@ -76,7 +87,7 @@ const ViewReview = () => {
         <View style={{ height: 150, marginBottom: 5, padding: 10, backgroundColor: 'white' }}>
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 0.4, flexDirection: 'row' }}>
-                    <View style={{ flex: 0.15  }}>
+                    <View style={{ flex: 0.15 }}>
                         <Avatar
                             rounded
                             size={40}
@@ -87,20 +98,20 @@ const ViewReview = () => {
                         <View>
                             <Text style={{ color: 'black', fontSize: 15 }}>{item.user[0].name}</Text>
                         </View>
-                        <View style={{ width: '50%', marginTop: 6 }}>
+                        <View style={{ width: '45%', marginTop: 6 }}>
                             <StarRating
                                 disabled={true}
                                 maxStars={5}
                                 rating={item.rating}
-                                starSize={12}
+                                starSize={13}
                                 emptyStarColor={STAR_COLOR}
                                 fullStarColor={STAR_COLOR}
                             />
                         </View>
                     </View>
                     <View style={{ flex: 0.45, alignItems: 'flex-end' }}>
-                        <View>
-                            {/* <Text style={{ color: 'grey', fontSize: 12 }}>{item.days} ago</Text> */}
+                        <View style={{ marginTop: 5 }}>
+                            <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('DD MMMM YYYY')}</Text>
                         </View>
                     </View>
                 </View>
@@ -113,14 +124,16 @@ const ViewReview = () => {
 
     const renderFooter = () => {
         return (
-            <View style={styles.footer}>
-                {onEndReached ? (
-                    <ActivityIndicator
-                        size={30}
-                        color='#CA054D'
-                        style={{ marginLeft: 8 }} />
-                ) : null}
-            </View>
+            onEndReached ?
+                (
+                    <View style={styles.footer} >
+                        <ActivityIndicator
+                            size={30}
+                            color='#CA054D'
+                            style={{ marginLeft: 8 }} />
+                    </View >
+                ) : null
+
         );
     };
 
@@ -129,11 +142,13 @@ const ViewReview = () => {
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 {
                     reviewModalOpen && (
-                        <SubmitReview open={reviewModalOpen} bikeId={route.params.id} handleSubmitReview={handleSubmitReview} />
+                        <SubmitReview open={reviewModalOpen} bikeId={route.params.id} handleSubmitReview={() => {
+                            handleSubmitReview();
+                        }} />
                     )
                 }
-                <View style={{ flex: 0.3 }}>
-                    <Image source={{ uri: `${bike.image}` }} style={{ height: 210, width: '100%' }} />
+                <View style={{ flex: 0.3, backgroundColor: 'red' }}>
+                    <Image source={{ uri: `${bike.image}` }} style={{ width: '100%', flex: 1 }} />
                 </View>
                 <View style={{ flex: 0.1, padding: 10, backgroundColor: 'white', justifyContent: 'space-around', flexDirection: 'row' }}>
                     <View style={{ flex: 0.5, backgroundColor: 'white' }}>
@@ -167,7 +182,8 @@ const ViewReview = () => {
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         ListFooterComponent={onEndReached ? renderFooter : null}
-                        onEndReached={whileOnEndReached}
+                        onEndReached={!onEndReached ? whileOnEndReached : null}
+                        onEndReachedThreshold={0.5}
                     />
                     <FAB
                         style={styles.fab}
@@ -198,6 +214,11 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         backgroundColor: '#011627',
+    },
+    footer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40
     },
 });
 
