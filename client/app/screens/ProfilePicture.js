@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Modal, PermissionsAndroid, TouchableOpacity, ImageEditor } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import DocumentPicker from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { PRIMARY_COLOR } from '../config';
@@ -12,7 +11,6 @@ const ProfilePicture = (props) => {
     const [picture, setPicture] = useState('');
     const [imageData, setImageData] = useState();
 
-    const [isLoaded, setIsLoaded] = useState(true);
     const [loading, setLoading] = useState(false);
 
     const requestExternalWritePermission = async () => {
@@ -53,11 +51,8 @@ const ProfilePicture = (props) => {
                     type,
                     name,
                 };
-
                 setPicture(uri);
-
                 setImageData(image);
-
             }).catch(error => {
                 console.log(error)
             })
@@ -65,7 +60,7 @@ const ProfilePicture = (props) => {
     };
 
     const uploadImage = () => {
-        setIsLoaded(false);
+        setLoading(true);
         const data = new FormData();
         data.append('file', imageData);
         data.append('upload_preset', 'bikefinity');
@@ -82,6 +77,7 @@ const ProfilePicture = (props) => {
             .then((res) => res.json())
             .then((data) => {
                 props.uploaded(true, data.url);
+                setLoading(false);
                 props.handleProfilePictureModal();
             })
             .catch((err) => {
@@ -98,63 +94,53 @@ const ProfilePicture = (props) => {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    {
-                        isLoaded ?
-                            (
-                                <View style={{ flex: 1 }}>
-                                    <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
-                                            Add Profile Picture
-                                        </Text>
-                                    </View>
-                                    <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
-                                        <View>
-                                            {
-                                                picture != '' ?
-                                                    (
-                                                        <Avatar
-                                                            rounded
-                                                            size={200}
-                                                            containerStyle={{ backgroundColor: '#F7F7F7', borderColor: PRIMARY_COLOR, borderWidth: 1 }}
-                                                            onPress={pickFromGallery}
-                                                            source={{ uri: picture }}
-                                                        />
-                                                    ) :
-                                                    (
-                                                        <Avatar
-                                                            rounded
-                                                            size={200}
-                                                            containerStyle={{ backgroundColor: '#F7F7F7', borderColor: PRIMARY_COLOR, borderWidth: 1 }}
-                                                            icon={{ name: 'camera-enhance', color: PRIMARY_COLOR, type: 'materialicons' }}
-                                                            onPress={pickFromGallery}
-                                                        />
-                                                    )
-                                            }
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
+                                Add Profile Picture
+                            </Text>
+                        </View>
+                        <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
+                            <View>
+                                {
+                                    picture != '' ?
+                                        (
+                                            <Avatar
+                                                rounded
+                                                size={200}
+                                                containerStyle={{ backgroundColor: '#F7F7F7', borderColor: PRIMARY_COLOR, borderWidth: 1 }}
+                                                onPress={pickFromGallery}
+                                                source={{ uri: picture }}
+                                            />
+                                        ) :
+                                        (
+                                            <Avatar
+                                                rounded
+                                                size={200}
+                                                containerStyle={{ backgroundColor: '#F7F7F7', borderColor: PRIMARY_COLOR, borderWidth: 1 }}
+                                                icon={{ name: 'camera-enhance', color: PRIMARY_COLOR, type: 'materialicons' }}
+                                                onPress={pickFromGallery}
+                                            />
+                                        )
+                                }
 
-                                        </View>
-                                    </View>
-                                    <View style={{ flex: 0.2, justifyContent: 'center' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                                            <View style={{ width: '30%' }}>
-                                                <TouchableOpacity onPress={props.handleProfilePictureModal}>
-                                                    <Button name="Cancel" color="blue" outlined={true} />
-                                                </TouchableOpacity>
-                                            </View>
-                                            <View style={{ width: '30%' }}>
-                                                <TouchableOpacity onPress={uploadImage} disabled={loading ? true : false}>
-                                                    <Button name="Done" color="blue" loading={false} />
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                    </View>
+                            </View>
+                        </View>
+                        <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                                <View style={{ width: '30%' }}>
+                                    <TouchableOpacity onPress={props.handleProfilePictureModal}>
+                                        <Button name="Cancel" color="blue" outlined={true} />
+                                    </TouchableOpacity>
                                 </View>
-                            ) :
-                            (
-                                <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-                                    <ActivityIndicator size="large" color='#CA054D' />
+                                <View style={{ width: '30%' }}>
+                                    <TouchableOpacity onPress={uploadImage} disabled={loading || picture === '' ? true : false}>
+                                        <Button name="Done" color="blue" loading={loading} />
+                                    </TouchableOpacity>
                                 </View>
-                            )
-                    }
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </View>
         </Modal >
