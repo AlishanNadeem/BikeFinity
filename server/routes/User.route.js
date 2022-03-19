@@ -22,4 +22,6 @@ router.get('/getUserReview/:id', AuthVerifier, review_controller.getUserReview);
 
 router.post('/deleteReview/:id', review_controller.deleteReview);
 
+router.post('/updateReview/:id', AuthVerifier, review_controller.updateReview);
+
 module.exports = router;
