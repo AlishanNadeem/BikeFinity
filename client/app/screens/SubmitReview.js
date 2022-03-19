@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, Image, FlatList, Modal } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import StarRating from 'react-native-star-rating';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Axios from "axios";
 import { useSelector } from 'react-redux';
 
-import { BASE_URL, STAR_COLOR } from "../config";
+import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR, STAR_COLOR } from "../config";
 import Input from '../components/Input';
 import Button from '../components/Button';
 
@@ -21,18 +22,17 @@ const SubmitReview = (props) => {
     //errors states
     const [emptyReview, setEmptyReview] = useState();
     const [emptyRating, setEmptyRating] = useState();
+    const [reviewId, setReviewId] = useState();
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [reviewAlreadyExist, setReviewAlreadyExist] = useState();
 
     const bikeId = props.bikeId;
+    // let reviewId = '';
 
     useEffect(() => {
         getUserReview();
-        return () => {
-            reset();
-        }
     }, [])
 
     const reset = () => {
@@ -53,14 +53,64 @@ const SubmitReview = (props) => {
         }
     }
 
+    const onPressUpdate = () => {
+        checkInputField('rating');
+        checkInputField('review');
+        if (emptyRating === false && emptyReview === false) {
+            setLoading(true);
+            updateReview();
+        }
+    }
+
     const postReview = () => {
-        var dataa = {
+        var data = {
             review: review,
             rating: rating,
             bikeId: bikeId
         }
 
-        Axios.post(`${BASE_URL}/bikefinity/user/postReview`, dataa, {
+        Axios.post(`${BASE_URL}/bikefinity/user/postReview`, data, {
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    setLoading(false);
+                    props.handleSubmitReview();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const updateReview = () => {
+        console.log(reviewId);
+        var data = {
+            review: review,
+            rating: rating,
+        }
+
+        Axios.post(`${BASE_URL}/bikefinity/user/updateReview/${reviewId}`, data, {
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    setLoading(false);
+                    props.handleSubmitReview();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const deleteReview = () => {
+
+        Axios.post(`${BASE_URL}/bikefinity/user/deleteReview/${reviewId}`, {
             headers: {
                 'x-access-token': token
             }
@@ -87,6 +137,7 @@ const SubmitReview = (props) => {
                     setReviewAlreadyExist(false);
                     setIsLoaded(true);
                 } else {
+                    setReviewId(res.data._id);
                     setReviewAlreadyExist(true);
                     setReview(res.data.review);
                     setRating(res.data.rating);
@@ -124,12 +175,23 @@ const SubmitReview = (props) => {
                         isLoaded ?
                             (
                                 <View style={{ flex: 1 }}>
-                                    <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
+                                    <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                                        <View style={{ flex: 0.2, backgroundColor: 'red' }} />
+                                        <View style={{ flex: 0.6, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
+                                                {
+                                                    reviewAlreadyExist ? "Update Review" : "Submit Review"
+                                                }
+                                            </Text>
+                                        </View>
+                                        <View style={{ flex: 0.2, alignItems: 'center' }}>
                                             {
-                                                reviewAlreadyExist ? "Update Review" : "Submit Review"
+                                                reviewAlreadyExist ?
+                                                    (
+                                                        <Icon name="delete-outline" color={SECONDARY_COLOR} size={18} onPress={deleteReview} />
+                                                    ) : null
                                             }
-                                        </Text>
+                                        </View>
                                     </View>
                                     <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'space-evenly' }}>
                                         <View style={{ width: '40%' }}>
@@ -182,7 +244,7 @@ const SubmitReview = (props) => {
                                                 </TouchableOpacity>
                                             </View>
                                             <View style={{ width: '30%' }}>
-                                                <TouchableOpacity onPress={onPressSubmit} disabled={loading ? true : false}>
+                                                <TouchableOpacity onPress={reviewAlreadyExist ? onPressUpdate : onPressSubmit} disabled={loading ? true : false}>
                                                     <Button name={reviewAlreadyExist ? "Update" : "Submit"} color="blue" loading={loading} />
                                                 </TouchableOpacity>
                                             </View>
