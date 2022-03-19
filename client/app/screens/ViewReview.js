@@ -81,6 +81,9 @@ const ViewReview = () => {
 
     const handleSubmitReview = () => {
         setReviewModalOpen(!reviewModalOpen);
+        setIsLoaded(false);
+        setData([]);
+        setPage(1);
     }
 
     const renderItem = ({ item }) => (
