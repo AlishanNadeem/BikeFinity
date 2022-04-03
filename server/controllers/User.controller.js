@@ -1,3 +1,4 @@
+const sendMessage = require('../helpers/Twilio');
 const Ads = require('../models/Ads.model');
 
 exports.postAd = ((req, res, next) => {
@@ -53,3 +54,15 @@ exports.getAd = ((req, res, next) => {
         res.send(ad);
     })
 });
+
+//messaging using TWILIO
+exports.message = (async (req, res, next) => {
+    try {
+        let messageId = await sendMessage(req.body.message, req.body.to);
+        if(messageId){
+            return res.send(messageId);
+        }
+    } catch(e){
+        return res.send(e);
+    }
+})

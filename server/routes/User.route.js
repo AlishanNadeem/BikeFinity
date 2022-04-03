@@ -24,4 +24,6 @@ router.post('/deleteReview/:id', review_controller.deleteReview);
 
 router.post('/updateReview/:id', AuthVerifier, review_controller.updateReview);
 
+router.post('/message', user_controller.message);
+
 module.exports = router;
