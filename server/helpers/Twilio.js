@@ -8,7 +8,7 @@ const sendMessage = async (body, to) => {
 
     let result = await client.messages.create({
         body: body,
-        to: to,
+        to: "+92" + to,
         from: '+17066053042',
     });
     
