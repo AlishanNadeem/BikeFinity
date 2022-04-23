@@ -17,11 +17,21 @@ exports.getBike = ((req, res, next) => {
 });
 
 exports.getBikeMake = ((req, res, next) => {
-    Bike.distinct("make", (err, make) => {
-        if (err) return next(err);
+    const { type } = req.query;
 
-        res.send(make);
-    })
+    if (type) {
+        Bike.distinct("make", { type: type }, (err, make) => {
+            if (err) return next(err);
+
+            res.send(make);
+        })
+    } else {
+        Bike.distinct("make", (err, make) => {
+            if (err) return next(err);
+
+            res.send(make);
+        })
+    }
 });
 
 exports.getBikeModel = ((req, res, next) => {
@@ -49,7 +59,7 @@ exports.getTopRatedBikes = ((req, res, next) => {
             $limit: 5
         }
     ], (err, models) => {
-        if(err) return next(err);
+        if (err) return next(err);
 
         res.send(models);
     })
