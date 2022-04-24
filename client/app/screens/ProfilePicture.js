@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Modal, PermissionsAndroid, TouchableOpacity, ImageEditor } from 'react-native';
+import { View, Text, StyleSheet, Modal, PermissionsAndroid, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
 

@@ -47,7 +47,7 @@ const Password = () => {
                 contactNumber: route.params.number,
                 location: route.params.location,
                 password: password,
-                profilePicture: profilePicture,
+                profilePicture: profilePicture != "" ? profilePicture : "https://res.cloudinary.com/dl28pe0lw/image/upload/v1647697738/avatar_ecpwit.jpg",
             })
             .then((res) => {
                 if (res.status === 200) {

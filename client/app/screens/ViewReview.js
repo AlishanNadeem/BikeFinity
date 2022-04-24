@@ -74,16 +74,18 @@ const ViewReview = () => {
     }
 
     const whileOnEndReached = () => {
-        console.log("reached")
         setOnEndReached(true);
         setPage(page + 1);
     }
 
     const handleSubmitReview = () => {
         setReviewModalOpen(!reviewModalOpen);
-        setIsLoaded(false);
-        setData([]);
-        setPage(1);
+        if (reviewModalOpen === true) {
+            setIsLoaded(false);
+            setData([]);
+            setPage(1);
+            getReviews();
+        }
     }
 
     const renderItem = ({ item }) => (

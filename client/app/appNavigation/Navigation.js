@@ -33,6 +33,8 @@ const Navigation = () => {
         <NavigationContainer onReady={() => RNBootSplash.hide()}>
             {
                 loggedIn === true ? <StackNavigation /> : loggedIn === false ? <AuthNavigation /> : null
+
+                // <AuthNavigation />   
             }
         </NavigationContainer>
     );
