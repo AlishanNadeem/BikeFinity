@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.UserLogin = ((req, res, next) => {
-    let expiration = 3600; //expires in one min
+    let expiration = '7d'; //expires in one min
 
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) return next(err);
