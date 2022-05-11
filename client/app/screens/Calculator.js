@@ -55,7 +55,7 @@ const Calculator = () => {
 
     //getting bike details according to make
     const getBikeDetails = (value) => {
-        Axios.get(`${BASE_URL}/bikefinity/bike/model/${value}`)
+        Axios.get(`${BASE_URL}/bikefinity/bike/model/${value}?type=Street Bike`)
             .then((res) => {
                 setBikeDetails(res.data)
             })
@@ -65,6 +65,7 @@ const Calculator = () => {
     }
 
     const onClickCalculate = () => {
+        setLoading(true)
         checkInputField('make')
         checkInputField('model')
         checkInputField('year')
@@ -90,6 +91,7 @@ const Calculator = () => {
                     price = price.toString();
                     setPredictedPrice(price);
                     setPredictedModal(true);
+                    setLoading(false);
                 }
             })
             .catch((err) => {
@@ -146,7 +148,7 @@ const Calculator = () => {
                             <View style={{ flex: 0.2, flexDirection: 'row', justifyContent: 'center' }}>
                                 <View style={{ flex: 0.4, justifyContent: 'center' }}>
                                     <TouchableOpacity onPress={() => setPredictedModal(false)}>
-                                        <Button name="OK" color="blue" loading={loading} />
+                                        <Button name="OK" color="blue" />
                                     </TouchableOpacity>
                                 </View>
                             </View>
