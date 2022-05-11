@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change the name of object
@@ -33,11 +33,13 @@ const ViewAd = () => {
     return (
         isLoaded ?
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <View style={{ flex: 0.3, backgroundColor: 'skyblue' }}></View>
+                <View style={{ flex: 0.3 }}>
+                    <Image source={{ uri: ad.image }} style={{ height: '100%', width: '100%' }} resizeMode='contain' />
+                </View>
                 <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 0.8 }}>
-                            <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{ad.price}</Text>
+                            <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Rs. {ad.price}</Text>
                         </View>
                         <View style={{ flex: 0.2, alignItems: 'flex-end', }}>
                             <Icon name='heart-outline' size={24} color='black' />
@@ -137,11 +139,11 @@ const ViewAd = () => {
                         </View>
                     </View>
                     <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5, justifyContent: 'center'}}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5, justifyContent: 'center' }}>
                             <View style={{ flex: 0.3, justifyContent: 'center' }}>
                                 <Icon name="message" color='white' size={22} />
                             </View>
-                            <View style={{ flex: 0.7, justifyContent: 'center'}}>
+                            <View style={{ flex: 0.7, justifyContent: 'center' }}>
                                 <Text style={{ color: 'white', fontSize: 18 }}>SMS</Text>
                             </View>
                         </View>

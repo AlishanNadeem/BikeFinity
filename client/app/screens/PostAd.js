@@ -13,6 +13,7 @@ import Axios from 'axios';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -21,6 +22,8 @@ import Button from '../components/Button';
 import { BASE_URL } from '../config';
 
 const PostAd = () => {
+
+  const { token } = useSelector(state => state.auth);
 
   const navigation = useNavigation();
 
@@ -34,6 +37,7 @@ const PostAd = () => {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [image, setImage] = useState();
+  const [imageData, setImageData] = useState();
   const [selectedImage, setSelectedImage] = React.useState(false);
 
   //errors state
@@ -49,7 +53,33 @@ const PostAd = () => {
   const currentYear = (new Date()).getFullYear();
   const years = Array.from(new Array(43), (val, index) => currentYear - index);
 
-  const postAd = () => {
+  const postImages = () => {
+    const data = new FormData();
+    data.append('file', imageData);
+    data.append('upload_preset', 'bikefinity');
+    data.append('cloud_name', 'dl28pe0lw');
+
+    fetch('https://api.cloudinary.com/v1_1/dl28pe0lw/image/upload', {
+      method: 'POST',
+      body: data,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const url = data.url
+        postAd(url)
+      })
+      .catch((err) => {
+        console.log('An error has occured while uploading the image.', err);
+      });
+  }
+
+  const postAd = (url) => {
+    console.log("post", url)
+    console.log("token", token)
     Axios.post(`${BASE_URL}/bikefinity/user/postAd`,
       {
         title: adTitle,
@@ -59,8 +89,13 @@ const PostAd = () => {
         kilometers: kilometers,
         condition: condition,
         location: location,
-        description: description
-      })
+        description: description,
+        image: url
+      }, {
+      headers: {
+        'x-access-token': token
+      }
+    })
       .then((res) => {
         if (res.status === 200) {
           setLoading(false);
@@ -73,6 +108,7 @@ const PostAd = () => {
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false)
       })
   }
 
@@ -87,7 +123,7 @@ const PostAd = () => {
     if (emptyAdTitle === false && emptyPrice === false && emptyEngine === false
       && emptyKilometers === false && emptyDescription === false && emptyLocation === false) {
       setLoading(true);
-      postAd();
+      postImages();
     }
   }
 
@@ -331,32 +367,42 @@ const PostAd = () => {
       </View>
       <View style={{ marginTop: 5 }}>
         <Text style={{ color: 'black' }}>Choose Image</Text>
-        <View style={{ marginTop: 5, height: 400, borderWidth: 1, borderRadius: 10 }}>
-          <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => {
-              ImagePicker.openPicker({
-                width: 300,
-                height: 400,
-                cropping: true,
-                multiple: true
-              }).then(images => {
-                console.log(images);
-                console.log(images[0].path)
-                setImage(images[0].path)
-                setSelectedImage(true)
-              }).catch(error => {
-                console.log(error)
-              })
-            }}
-          >
-            <View>
-              {
-                selectedImage ?
-                  <Image source={{ uri: image }} style={{ width: 300, height: 300, borderRadius: 20 }} /> :
-                  <Text>Choose Images</Text>
-              }
-            </View>
-          </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <View style={{ marginTop: 15, height: 300, width: 300, borderRadius: 10 }}>
+            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+              onPress={() => {
+                ImagePicker.openPicker({
+                  width: 300,
+                  height: 400,
+                  cropping: true,
+                  multiple: false
+                }).then(data => {
+                  const uri = data.path;
+                  const type = data.mime;
+                  const name = "bikefinity/ads/" + data.modificationDate;
+                  const image = {
+                    uri,
+                    type,
+                    name,
+                  };
+                  setImage(uri)
+                  setImageData(image)
+                  setSelectedImage(true)
+                }).catch(error => {
+                  console.log(error)
+                })
+              }}
+            >
+              <View>
+                {
+                  selectedImage ?
+                    <Image source={{ uri: image }} style={{ width: 300, height: 300, borderRadius: 0 }} resizeMode='contain' /> :
+                    <Text>Choose Images</Text>
+                }
+              </View>
+            </TouchableOpacity>
+          </View>
+
         </View>
       </View>
       <View style={{ marginTop: 10, height: 60, alignItems: 'flex-end', justifyContent: 'center' }}>

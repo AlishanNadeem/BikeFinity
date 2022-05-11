@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FAB } from 'react-native-paper';
 import moment from 'moment';
@@ -7,11 +7,13 @@ import moment from 'moment';
 import Axios from 'axios';
 
 import { useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 
 import { BASE_URL } from "../config";
 
 const Marketplace = ({ navigation }) => {
 
+    const isFocused = useIsFocused();
     const { token } = useSelector(state => state.auth);
 
     const [refreshing, setRefreshing] = useState(false);
@@ -22,7 +24,7 @@ const Marketplace = ({ navigation }) => {
 
     useEffect(() => {
         getAds();
-    }, [page]);
+    }, [page, isFocused]);
 
     const getAds = () => {
         Axios.get(`${BASE_URL}/bikefinity/user/getAds?page=${page}`, {
@@ -74,12 +76,13 @@ const Marketplace = ({ navigation }) => {
             // delayPressIn={80}
             activeOpacity={1}
         >
-            <View style={{ flex: 0.5, backgroundColor: 'skyblue' }}>
+            <View style={{ flex: 0.5 }}>
+                <Image source={{uri: item.image}} style={{height: '100%', width: '100%'}} resizeMode='stretch' />
             </View>
             <View style={{ flex: 0.5, padding: 5 }}>
                 <View style={{ flex: 0.2, flexDirection: 'row' }}>
                     <View style={{ flex: 0.8 }}>
-                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Rs {item.price}</Text>
+                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Rs. {item.price}</Text>
                     </View>
                     <View style={{ flex: 0.2, alignItems: 'center', }}>
                         <Icon name='heart-outline' size={20} color='black' />
@@ -91,8 +94,8 @@ const Marketplace = ({ navigation }) => {
                 <View style={{ flex: 0.15, justifyContent: 'center' }}>
                     <Text style={{ color: 'grey', fontSize: 12 }}>{item.year} | {item.location}</Text>
                 </View>
-                <View style={{ flex: 0.15, justifyContent: 'center' }}>
-                    <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('YYYY')}</Text>
+                <View style={{ flex: 0.15, justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('DD/MM/YYYY')}</Text>
                 </View>
             </View>
         </TouchableOpacity>
