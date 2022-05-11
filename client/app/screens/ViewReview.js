@@ -116,7 +116,7 @@ const ViewReview = () => {
                     </View>
                     <View style={{ flex: 0.45, alignItems: 'flex-end' }}>
                         <View style={{ marginTop: 5 }}>
-                            <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('DD MMMM YYYY')}</Text>
+                            <Text style={{ color: 'grey', fontSize: 12 }}>{moment(item.postDate).format('DD/MM/YYYY')}</Text>
                         </View>
                     </View>
                 </View>
