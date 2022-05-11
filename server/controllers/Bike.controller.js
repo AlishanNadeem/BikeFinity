@@ -35,17 +35,36 @@ exports.getBikeMake = ((req, res, next) => {
 });
 
 exports.getBikeModel = ((req, res, next) => {
-    Bike.aggregate([
-        {
-            $match: {
-                make: req.params.make
-            }
-        }
-    ], (err, models) => {
-        if (err) return next(err);
+    const { type } = req.query;
 
-        res.send(models);
-    })
+    if (type) {
+        Bike.aggregate([
+            {
+                $match: {
+                    make: req.params.make,
+                    type: type
+                }
+            }
+        ], (err, models) => {
+            if (err) return next(err);
+
+            res.send(models);
+        })
+    } else {
+        Bike.aggregate([
+            {
+                $match: {
+                    make: req.params.make
+                }
+            }
+        ], (err, models) => {
+            if (err) return next(err);
+
+            res.send(models);
+        })
+    }
+
+
 });
 
 exports.getTopRatedBikes = ((req, res, next) => {

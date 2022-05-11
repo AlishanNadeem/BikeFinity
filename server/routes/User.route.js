@@ -5,7 +5,7 @@ const user_controller = require('../controllers/User.controller');
 const review_controller = require('../controllers/Review.controller');
 const { AuthVerifier } = require('../middleware/AuthVerifier');
 
-router.post('/postAd', user_controller.postAd);
+router.post('/postAd', AuthVerifier, user_controller.postAd);
 
 router.get('/getAds', AuthVerifier, user_controller.getAds);
 

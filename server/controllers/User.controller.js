@@ -2,6 +2,7 @@ const sendMessage = require('../helpers/Twilio');
 const Ads = require('../models/Ads.model');
 
 exports.postAd = ((req, res, next) => {
+    console.log(req.decoded.id)
     let ad = new Ads({
         title: req.body.title,
         price: req.body.price,
@@ -13,7 +14,8 @@ exports.postAd = ((req, res, next) => {
         condition: req.body.condition,
         description: req.body.description,
         location: req.body.location,
-        // postedBy: req.decoded.id
+        image: req.body.image,
+        postedBy: req.decoded.id
     });
 
     ad.save((err) => {

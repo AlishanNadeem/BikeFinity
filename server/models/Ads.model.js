@@ -12,10 +12,10 @@ let adSchema = new Schema({
     condition: { type: String },
     description: { type: String },
     location: { type: String, default: 'Karachi' },
+    image: { type: String },
     postDate: { type: Date, default: Date.now },
     postedBy: { type: Schema.Types.ObjectId }, //user_id from req.decoded
     status: { type: String, default: "Active" },
-    // photos: {type: File}
 });
 
 module.exports = mongoose.model('Ad', adSchema);
