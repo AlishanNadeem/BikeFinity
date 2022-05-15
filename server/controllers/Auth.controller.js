@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.UserLogin = ((req, res, next) => {
-    let expiration = '7d'; //expires in one min
+    let expiration = '7d'; //expires in seven days
 
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) return next(err);
@@ -31,7 +31,7 @@ exports.UserLogin = ((req, res, next) => {
             req.decoded = decoded;
         });
 
-        res.status(200).send({ auth: true, token: token, expiry: req.decoded.exp });
+        res.status(200).send({ auth: true, token: token, expiry: req.decoded.exp, userId: req.decoded.id });
     });
 });
 

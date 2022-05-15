@@ -1,8 +1,8 @@
 const sendMessage = require('../helpers/Twilio');
 const Ads = require('../models/Ads.model');
+const User = require('../models/User.model');
 
 exports.postAd = ((req, res, next) => {
-    console.log(req.decoded.id)
     let ad = new Ads({
         title: req.body.title,
         price: req.body.price,
@@ -57,14 +57,42 @@ exports.getAd = ((req, res, next) => {
     })
 });
 
+exports.likeAd = ((req, res, next) => {
+    Ads.findByIdAndUpdate(req.body.id, {
+        $push: {
+            likedBy: req.decoded.id
+        }
+    }, {
+        new: true
+    }, (err, ad) => {
+        if (err) return next(err)
+
+        res.send(ad)
+    })
+});
+
+exports.unlikeAd = ((req, res, next) => {
+    // console.log(req.params.id)
+    Ads.findByIdAndUpdate(req.body.id, {
+        $pull: {
+            likedBy: req.decoded.id
+        }
+    }, {
+        new: true
+    }, (err, ad) => {
+        if (err) return next(err)
+        res.send(ad)
+    })
+});
+
 //messaging using TWILIO
 exports.message = (async (req, res, next) => {
     try {
         let messageId = await sendMessage(req.body.message, req.body.to);
-        if(messageId){
+        if (messageId) {
             return res.send(messageId);
         }
-    } catch(e){
+    } catch (e) {
         return res.send(e);
     }
 })

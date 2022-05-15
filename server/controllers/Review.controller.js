@@ -13,11 +13,7 @@ exports.postReview = (async (req, res, next) => {
 
     let bike = await Bike.findById(review.bikeId);
 
-    console.log("Bike", bike);
-
     let counterReviews = bike.counterReviews + 1;
-
-    console.log("Reviews #", counterReviews)
 
     let averageRating = 0;
 
@@ -26,8 +22,6 @@ exports.postReview = (async (req, res, next) => {
     } else {
         averageRating = review.rating;
     }
-
-    console.log("Avg Rat ", averageRating)
 
     Bike.findByIdAndUpdate(review.bikeId,
         {

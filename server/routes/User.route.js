@@ -13,6 +13,10 @@ router.get('/getAd/:id', user_controller.getAd);
 
 router.post('/postReview', AuthVerifier, review_controller.postReview);
 
+router.post('/likeAd', AuthVerifier, user_controller.likeAd); //:id => ad _id
+
+router.post('/unlikeAd', AuthVerifier, user_controller.unlikeAd); //:id => ad _id
+
 router.get('/getReviews/:id', review_controller.getReviews);
 
 router.get('/getTopRatedReviews', review_controller.getTopRatedReviews);
