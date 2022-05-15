@@ -1,11 +1,12 @@
 import { LOG_IN, LOG_OUT } from './Types';
 
-const LogIn = (token, expiry) => {
+const LogIn = (token, expiry, userId) => {
     return {
         type: LOG_IN,
         payload: {
             token: token,
-            expiry: expiry
+            expiry: expiry,
+            userId: userId
         }
     }
 }

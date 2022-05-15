@@ -1,8 +1,8 @@
-export const BASE_URL = "http://server-deploy-bikefinity.herokuapp.com";
+// export const BASE_URL = "http://server-deploy-bikefinity.herokuapp.com";
 
 // export const BASE_URL = "http://10.0.2.2:5000";
 
-// export const BASE_URL = "http://192.168.1.105:5000";
+export const BASE_URL = "http://192.168.1.102:5000";
 
 export const PRIMARY_COLOR = "#011627";
 

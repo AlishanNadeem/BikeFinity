@@ -6,9 +6,10 @@ import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change t
 import Button from "../components/Button";
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSelector } from "react-redux";
 import Axios from "axios";
 
-import { BASE_URL } from "../config";
+import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR } from "../config";
 
 //need to loading app loader on start then ad fetched set to false
 const ViewAd = () => {
@@ -16,19 +17,71 @@ const ViewAd = () => {
     const navigation = useNavigation();
     const route = useRoute();
 
+    const { token, userId } = useSelector(state => state.auth);
+
     const [ad, setAd] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
+        getAd()
+    }, [])
+
+    const getAd = () => {
         Axios.get(`${BASE_URL}/bikefinity/user/getAd/${route.params.id}`)
             .then((res) => {
                 setAd(res.data);
                 setIsLoaded(true);
             })
-            .catch((error) => {
-                console.log(error)
+            .catch((err) => {
+                console.log(err)
             })
-    }, [])
+    }
+
+    const likeAd = () => {
+        Axios.post(`${BASE_URL}/bikefinity/user/likeAd`, {
+            id: ad._id
+        }, {
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then((res) => {
+                getAd()
+            })
+            .catch((error) => {
+                let err = error.toJSON();
+                if (err.status === 500) {
+                    console.log("Token Expired. Login again.")
+                } else if (err.status === 401) {
+                    console.log("No Token Provided.")
+                } else {
+                    console.log(err);
+                }
+            })
+    }
+
+    const unlikeAd = () => {
+        Axios.post(`${BASE_URL}/bikefinity/user/unlikeAd`, {
+            id: ad._id
+        }, {
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then((res) => {
+                getAd()
+            })
+            .catch((error) => {
+                let err = error.toJSON();
+                if (err.status === 500) {
+                    console.log("Token Expired. Login again.")
+                } else if (err.status === 401) {
+                    console.log("No Token Provided.")
+                } else {
+                    console.log(err);
+                }
+            })
+    }
 
     return (
         isLoaded ?
@@ -42,7 +95,23 @@ const ViewAd = () => {
                             <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Rs. {ad.price}</Text>
                         </View>
                         <View style={{ flex: 0.2, alignItems: 'flex-end', }}>
-                            <Icon name='heart-outline' size={24} color='black' />
+                            {
+                                ad.likedBy.length > 0 ? (
+                                    ad.likedBy.map((item, index) => {
+                                        return item === userId ?
+                                            (
+                                                <Icon key={index} name='heart' size={24} color={SECONDARY_COLOR} onPress={unlikeAd} />
+                                            ) :
+                                            (
+                                                <Icon key={index} name='heart-outline' size={24} color='black' onPress={likeAd} />
+                                            )
+                                    })
+                                ) :
+                                    (
+                                        <Icon name='heart-outline' size={24} color='black' onPress={likeAd} />
+                                    )
+                            }
+
                         </View>
                     </View>
                     <View>

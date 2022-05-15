@@ -63,8 +63,9 @@ const Login = () => {
         else if (res.status === 200) {
           setLoading(false);
           const token = res.data.token;
-          const expiry = res.data.expiry
-          dispatch(LogIn(token, expiry));
+          const expiry = res.data.expiry;
+          const userId = res.data.userId;
+          dispatch(LogIn(token, expiry, userId));
         }
       })
       .catch((err) => {

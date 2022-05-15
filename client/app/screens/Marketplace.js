@@ -9,12 +9,12 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 
-import { BASE_URL } from "../config";
+import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR } from "../config";
 
 const Marketplace = ({ navigation }) => {
 
     const isFocused = useIsFocused();
-    const { token } = useSelector(state => state.auth);
+    const { token, userId } = useSelector(state => state.auth);
 
     const [refreshing, setRefreshing] = useState(false);
     const [onEndReached, setOnEndReached] = useState(false);
@@ -24,7 +24,7 @@ const Marketplace = ({ navigation }) => {
 
     useEffect(() => {
         getAds();
-    }, [page, isFocused]);
+    }, [page]);
 
     const getAds = () => {
         Axios.get(`${BASE_URL}/bikefinity/user/getAds?page=${page}`, {
@@ -77,15 +77,27 @@ const Marketplace = ({ navigation }) => {
             activeOpacity={1}
         >
             <View style={{ flex: 0.5 }}>
-                <Image source={{uri: item.image}} style={{height: '100%', width: '100%'}} resizeMode='stretch' />
+                <Image source={{ uri: item.image }} style={{ height: '100%', width: '100%' }} resizeMode='stretch' />
             </View>
             <View style={{ flex: 0.5, padding: 5 }}>
                 <View style={{ flex: 0.2, flexDirection: 'row' }}>
                     <View style={{ flex: 0.8 }}>
                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Rs. {item.price}</Text>
                     </View>
-                    <View style={{ flex: 0.2, alignItems: 'center', }}>
-                        <Icon name='heart-outline' size={20} color='black' />
+                    <View style={{ flex: 0.2, alignItems: 'center' }}>
+                        {
+                            item.likedBy ?
+                                (
+                                    item.likedBy.map((item, index) => {
+                                        return userId === item ? (
+                                            <Icon key={index} name='heart' size={20} color={SECONDARY_COLOR} />
+                                        ) : <Icon key={index} name='heart-outline' size={20} color='black' />
+                                    })
+                                ) :
+                                (
+                                    <Icon name='heart-outline' size={20} color='black' />
+                                )
+                        }
                     </View>
                 </View>
                 <View style={{ flex: 0.5, }}>
