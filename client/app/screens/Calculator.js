@@ -286,7 +286,7 @@ const Calculator = () => {
             <View style={{ height: height * 0.17, alignItems: 'center', justifyContent: 'center' }}>
                 <View style={{ width: '80%' }}>
                     <TouchableOpacity onPress={onClickCalculate} disabled={loading ? true : false}>
-                        <Button name="Calculate" color="blue" loading={loading} />
+                        <Button name="Calculate" color="blue" loading={loading} outlined/>
                     </TouchableOpacity>
                 </View>
             </View>

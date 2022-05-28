@@ -11,7 +11,7 @@ const Events = () => {
     return(
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
             <TouchableOpacity onPress={() => dispatch(LogOut())}>
-                <Text>LOGOUT</Text>
+                <Text style={{fontSize: 18}}>Page in Progress. 🛠️🛠️</Text>
             </TouchableOpacity>
         </View>
     );

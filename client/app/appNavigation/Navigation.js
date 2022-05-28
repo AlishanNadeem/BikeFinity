@@ -9,6 +9,7 @@ import { LogOut } from '../redux/actions/authAction';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert } from 'react-native';
+import DrawerNavigation from './DrawerNavigation';
 
 const Navigation = () => {
 
@@ -32,7 +33,8 @@ const Navigation = () => {
     return (
         <NavigationContainer onReady={() => RNBootSplash.hide()}>
             {
-                loggedIn === true ? <StackNavigation /> : loggedIn === false ? <AuthNavigation /> : null
+                // loggedIn === true ? <StackNavigation /> : loggedIn === false ? <AuthNavigation /> : null
+                loggedIn === true ? <DrawerNavigation /> : loggedIn === false ? <AuthNavigation /> : null
 
                 // <AuthNavigation />   
             }

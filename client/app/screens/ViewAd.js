@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons'; // have to change the name of object
@@ -198,14 +198,14 @@ const ViewAd = () => {
                 </View>
                 <View style={{ flex: 0.07, backgroundColor: 'white', flexDirection: 'row' }}>
                     <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }} onPress={() => Linking.openURL(`tel:${'0' + ad.postedBy.contactNumber}`)}>
                             <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>
                                 <Icon name="phone" color='white' size={22} />
                             </View>
                             <View style={{ flex: 0.75, justifyContent: 'center' }}>
                                 <Text style={{ color: 'white', fontSize: 18 }}>Call</Text>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5, justifyContent: 'center' }}>

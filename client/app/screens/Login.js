@@ -65,7 +65,8 @@ const Login = () => {
           const token = res.data.token;
           const expiry = res.data.expiry;
           const userId = res.data.userId;
-          dispatch(LogIn(token, expiry, userId));
+          const user = res.data.user;
+          dispatch(LogIn(token, expiry, userId, user));
         }
       })
       .catch((err) => {
