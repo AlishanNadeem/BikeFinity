@@ -1,6 +1,7 @@
 const sendMessage = require('../helpers/Twilio');
 const Ads = require('../models/Ads.model');
 const User = require('../models/User.model');
+const Review = require('../models/Review.model');
 
 exports.postAd = ((req, res, next) => {
     let ad = new Ads({
@@ -50,11 +51,13 @@ exports.getAds = ((req, res, next) => {
 });
 
 exports.getAd = ((req, res, next) => {
-    Ads.findById({ _id: req.params.id }, (err, ad) => {
-        if (err) return next(err);
-
-        res.send(ad);
-    })
+    Ads.findById(req.params.id).populate('postedBy')
+        .then((ad) => {
+            res.send(ad)
+        })
+        .catch((err) => {
+            next(err)
+        })
 });
 
 exports.likeAd = ((req, res, next) => {
@@ -83,6 +86,34 @@ exports.unlikeAd = ((req, res, next) => {
         if (err) return next(err)
         res.send(ad)
     })
+});
+
+//update profile
+exports.updateProfile = ((req, res, next) => {
+    User.findByIdAndUpdate(req.decoded.id, {
+        name: req.body.name,
+        email: req.body.email,
+        contactNumber: req.body.contactNumber,
+        location: req.body.location
+    }, {
+        new: true
+    }, (err, user) => {
+        if (err) return next(err)
+        res.send(user)
+    })
+});
+
+exports.stats = (async (req, res, next) => {
+
+    let reviewCount = await Review.find({ userId: req.decoded.id });
+
+    let adsCount = await Ads.find({ postedBy: req.decoded.id });
+
+    res.send({
+        reviewCount: reviewCount.length,
+        adsCount: adsCount.length
+    })
+
 });
 
 //messaging using TWILIO

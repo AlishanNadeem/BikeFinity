@@ -13,9 +13,9 @@ let adSchema = new Schema({
     description: { type: String },
     location: { type: String, default: 'Karachi' },
     image: { type: String },
-    likedBy: [{ type: Schema.Types.ObjectId, ref: "users" , default: null}],
+    likedBy: [{ type: Schema.Types.ObjectId, ref: "User" , default: null}],
     postDate: { type: Date, default: Date.now },
-    postedBy: { type: Schema.Types.ObjectId }, //user_id from req.decoded
+    postedBy: { type: Schema.Types.ObjectId, ref: "User" }, //user_id from req.decoded
     status: { type: String, default: "Active" },
 });
 

@@ -28,6 +28,12 @@ router.post('/deleteReview/:id', review_controller.deleteReview);
 
 router.post('/updateReview/:id', AuthVerifier, review_controller.updateReview);
 
+//stats calculation
+router.get('/stats', AuthVerifier, user_controller.stats);
+
+//edit profile
+router.post('/updateProfile', AuthVerifier, user_controller.updateProfile);
+
 router.post('/message', user_controller.message);
 
 module.exports = router;

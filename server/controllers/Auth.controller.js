@@ -2,6 +2,7 @@ const User = require('../models/User.model');
 const config = require('../config');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 exports.UserLogin = ((req, res, next) => {
     let expiration = '7d'; //expires in seven days
@@ -31,7 +32,11 @@ exports.UserLogin = ((req, res, next) => {
             req.decoded = decoded;
         });
 
-        res.status(200).send({ auth: true, token: token, expiry: req.decoded.exp, userId: req.decoded.id });
+        User.findById(req.decoded.id, (err, user) => {
+            if (err) return next(err)
+
+            res.status(200).send({ auth: true, token: token, expiry: req.decoded.exp, userId: req.decoded.id, user: user });
+        })
     });
 });
 
@@ -48,7 +53,28 @@ exports.UserSignup = ((req, res, next) => {
     user.save((err) => {
         if (err) return next(err);
 
-        res.send("User registered successfully");
+        let mailTransporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'cs1812102@szabist.pk',
+                pass: 'szabistsucks'
+            }
+        });
+
+        let mailDetails = {
+            from: 'info@bikefinity.pk <noreply@bikefinity.pk>',
+            to: user.email,
+            subject: 'Welcome to BikeFinity',
+            text: `Hi ${user.name},\n\nWelcome to Bikefinity and thankyou for signing up with us. From now on you will get regular updates on biking events in your desired city and since you are now a premium member of Bikefinity, you can advertise the sell of your bike at no cost or browse thousands of bike for your daily or predilection bike.\n\nKeep an eye on reviews tab as we'll be sending you the best bike for your desired budget. Let's get you a healthy and bubbly experience.\n\nCheers,\nBikeFinity`
+        };
+
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                res.send("User registered successfully");
+            }
+        });
     })
 });
 
