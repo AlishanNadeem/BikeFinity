@@ -88,11 +88,11 @@ const Marketplace = ({ navigation }) => {
                         {
                             item.likedBy ?
                                 (
-                                    item.likedBy.map((item, index) => {
-                                        return userId === item ? (
-                                            <Icon key={index} name='heart' size={20} color={SECONDARY_COLOR} />
-                                        ) : <Icon key={index} name='heart-outline' size={20} color='black' />
-                                    })
+                                    item.likedBy.includes(userId) ? (
+                                        <Icon name='heart' size={20} color={SECONDARY_COLOR} />
+                                    ) : (
+                                        <Icon name='heart-outline' size={20} color='black' />
+                                    )
                                 ) :
                                 (
                                     <Icon name='heart-outline' size={20} color='black' />
