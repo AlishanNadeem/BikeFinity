@@ -3,6 +3,7 @@ const config = require('../config');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const OtpGenerator = require('../helpers/OtpGenerator')
 
 exports.UserLogin = ((req, res, next) => {
     let expiration = '7d'; //expires in seven days
@@ -97,4 +98,165 @@ exports.checkUser = ((req, res, next) => {
             })
         }
     })
+});
+
+exports.resetPassword = (async (req, res, next) => {
+    if (!req.body.email) {
+        return res.status(400).send({
+            statusCode: 0,
+            message: "Email is required."
+        })
+    }
+
+    let user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return res.status(200).send({
+            statusCode: 0,
+            message: 'User not found'
+        });
+    }
+
+    let resetCode = await OtpGenerator.generateOTP();
+    let resetCodeExpiry = new Date(Date.now() + 1 * (60 * 60 * 1000));
+
+    let mailTransporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'cs1812102@szabist.pk',
+            pass: 'szabistsucks'
+        }
+    });
+
+    var mailOptions = {
+        from: 'info@bikefinity.pk <noreply@bikefinity.pk>',
+        to: user.email,
+        subject: 'Password Reset Code',
+        text: `Hi ${user.name}. Your Password reset code is : ${resetCode}`
+    };
+
+    mailTransporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+    User.findByIdAndUpdate(user._id,
+        {
+            $set: {
+                resetCode: resetCode,
+                resetCodeExpiry: resetCodeExpiry
+            }
+        },
+        {
+            new: true
+        },
+        (err, user) => {
+            if (err) return err;
+
+            return res.status(200).send({
+                statusCode: 1,
+                message: "Successfully generated OTP",
+                data: {
+                    user: user
+                }
+            })
+        })
+});
+
+
+exports.verifyOTP = (async (req, res, next) => {
+
+    if (!req.body.email || !req.body.resetCode) {
+        return res.status(400).send({
+            statusCode: 0,
+            message: "All fields are required."
+        })
+    }
+
+    let user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return res.status(404).send({
+            statusCode: 0,
+            message: 'User not found'
+        });
+    }
+
+    let now = new Date();
+
+    if (now < user.resetCodeExpiry) {
+        if (req.body.resetCode === user.resetCode) {
+            return res.status(200).send({
+                statusCode: 1,
+                message: "Reset code verified."
+            })
+        } else {
+            return res.status(200).send({
+                statusCode: 0,
+                message: "Invalid reset code."
+            })
+        }
+    } else {
+        return res.status(200).send({
+            statusCode: 0,
+            message: "Reset code expired."
+        })
+    }
+});
+
+exports.updatePassword = (async (req, res, next) => {
+
+    if (!req.body.password) {
+        return res.status(400).send({
+            statusCode: 0,
+            message: "Password is required."
+        })
+    }
+
+    let user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return res.status(404).send({
+            statusCode: 0,
+            message: 'User not found.'
+        });
+    }
+
+    let passwordValidity = bcrypt.compareSync(req.body.password, user.password);
+
+    if (passwordValidity) {
+        return res.status(200).send({
+            statusCode: 0,
+            message: "Password must be new."
+        })
+    } else {
+
+        let password = bcrypt.hashSync(req.body.password, 8)
+
+        User.findByIdAndUpdate(user._id,
+            {
+                $set: {
+                    password: password,
+                    resetCode: null,
+                    resetCodeExpiry: null
+                }
+            },
+            {
+                new: true
+            },
+            (err, user) => {
+                if (err) return err;
+
+                return res.status(200).send({
+                    statusCode: 1,
+                    message: "Password reset successfully",
+                    data: {
+                        user: user
+                    }
+                })
+            })
+    }
 });

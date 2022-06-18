@@ -109,6 +109,7 @@ exports.stats = (async (req, res, next) => {
 
     let adsCount = await Ads.find({ postedBy: req.decoded.id });
 
+
     res.send({
         reviewCount: reviewCount.length,
         adsCount: adsCount.length

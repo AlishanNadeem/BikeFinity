@@ -12,4 +12,10 @@ router.get('/checkUser/:email', auth_controller.checkUser);
 
 router.get('/verifyToken', AuthVerifier);
 
+router.post('/resetPassword', auth_controller.resetPassword);
+
+router.post('/verifyOTP', auth_controller.verifyOTP);
+
+router.post('/updatePassword', auth_controller.updatePassword);
+
 module.exports = router;
