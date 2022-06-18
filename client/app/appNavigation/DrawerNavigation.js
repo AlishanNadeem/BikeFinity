@@ -41,7 +41,6 @@ const CustomDrawerContent = (props) => {
     const [likedAdsCount, setLikedAdsCount] = useState(0);
 
     useEffect(() => {
-        console.log("gi")
         Axios.get(`${BASE_URL}/bikefinity/user/stats`, {
             headers: {
                 'x-access-token': token

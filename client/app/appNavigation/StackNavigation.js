@@ -30,7 +30,7 @@ const StackNavigation = () => {
                     shadowOpacity: 0.25,
                     shadowRadius: 3.84,
                     elevation: 5,
-                },
+                }
             }}>
             <Stack.Screen name="MyTabs" component={BottomTabNavigation}
                 options={{

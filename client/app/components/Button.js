@@ -12,9 +12,9 @@ const Button = (props) => {
             }]}>
             {
                 props.loading === true ?
-                    <ActivityIndicator size={26} color="#FFFFFF" />
+                    <ActivityIndicator size={26} color={props.outlined ? '#CA054D' : '#FFFFFF'} />
                     :
-                    <Text style={[styles.btnTxt, { color: props.outlined ? '#CA054D' : 'white' }]}>{props.name}</Text>
+                    <Text style={[styles.btnTxt, { color: props.outlined ? '#CA054D' : '#FFFFFF' }]}>{props.name}</Text>
             }
         </View>
     );
