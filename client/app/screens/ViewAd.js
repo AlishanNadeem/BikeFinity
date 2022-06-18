@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import Axios from "axios";
 
 import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR } from "../config";
+import DetailCard from "../components/DetailCard";
 
 //need to loading app loader on start then ad fetched set to false
 const ViewAd = () => {
@@ -89,23 +90,19 @@ const ViewAd = () => {
                 <View style={{ flex: 0.3 }}>
                     <Image source={{ uri: ad.image }} style={{ height: '100%', width: '100%' }} resizeMode='contain' />
                 </View>
-                <View style={{ flex: 0.15, padding: 10, justifyContent: 'space-around' }}>
-                    <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 0.15, margin: 10 }}>
+                    <View style={{ flex: 0.3, flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ flex: 0.8 }}>
                             <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Rs. {ad.price}</Text>
                         </View>
                         <View style={{ flex: 0.2, alignItems: 'flex-end', }}>
                             {
                                 ad.likedBy.length > 0 ? (
-                                    ad.likedBy.map((item, index) => {
-                                        return item === userId ?
-                                            (
-                                                <Icon key={index} name='heart' size={24} color={SECONDARY_COLOR} onPress={unlikeAd} />
-                                            ) :
-                                            (
-                                                <Icon key={index} name='heart-outline' size={24} color='black' onPress={likeAd} />
-                                            )
-                                    })
+                                    ad.likedBy.includes(userId) ? (
+                                        <Icon name='heart' size={24} color={SECONDARY_COLOR} onPress={unlikeAd} />
+                                    ) : (
+                                        <Icon name='heart-outline' size={24} color='black' onPress={likeAd} />
+                                    )
                                 ) :
                                     (
                                         <Icon name='heart-outline' size={24} color='black' onPress={likeAd} />
@@ -114,13 +111,13 @@ const ViewAd = () => {
 
                         </View>
                     </View>
-                    <View>
+                    <View style={{ flex: 0.4, justifyContent: 'center' }}>
                         <Text style={{ color: 'black', fontSize: 18 }}>{ad.title}</Text>
                     </View>
-                    <View>
+                    <View style={{ flex: 0.3, justifyContent: 'center' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 0.08 }}>
-                                <MIcon name="location-pin" size={20} />
+                            <View style={{ flex: 0.08, alignItems: 'center' }}>
+                                <MIcon name="location-pin" size={16} />
                             </View>
                             <View style={{ flex: 0.7 }}>
                                 <Text>{ad.location}</Text>
@@ -132,71 +129,28 @@ const ViewAd = () => {
                     </View>
                 </View>
                 <View style={{ flex: 0.48, padding: 10 }}>
-                    <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>Details</Text>
-                    <ScrollView style={{ marginTop: 10 }}>
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Year</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.year}</Text>
-                            </View>
+                    <View style={{ flex: 0.25 }}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ backgroundColor: "#FFFFFF", padding: 5 }}>
+                            <DetailCard title={"Year"} value={ad.year} />
+                            <DetailCard title={"Model"} value={ad.model} />
+                            <DetailCard title={"Make"} value={ad.make} />
+                            <DetailCard title={"Engine"} value={ad.engine + ' CC'} />
+                            <DetailCard title={"Kilometers"} value={ad.kilometers} />
+                            <DetailCard title={"Condition"} value={ad.condition} />
+                        </ScrollView>
+                    </View>
+                    <View style={{ flex: 0.7 }}>
+                        <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                            <Text style={{ color: 'black', fontSize: 15, fontWeight: '600' }}>Description</Text>
                         </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Make</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.make}</Text>
-                            </View>
+                        <View style={{ flex: 0.8 }}>
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                                <Text style={{ color: 'black', textAlign: 'justify' }}>{ad.description}</Text>
+                            </ScrollView>
                         </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Model</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.model}</Text>
-                            </View>
-                        </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Engine</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.engine} cc</Text>
-                            </View>
-                        </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Kilometers</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.kilometers} kms</Text>
-                            </View>
-                        </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <View style={{ flex: 0.3 }}>
-                                <Text style={styles.label}>Condition</Text>
-                            </View>
-                            <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
-                                <Text style={styles.label}>{ad.condition}</Text>
-                            </View>
-                        </View>
-                        <Divider />
-                        <View style={styles.item}>
-                            <Text style={styles.label}>Description</Text>
-                        </View>
-                        <View style={styles.item}>
-                            <Text style={styles.label}>{ad.description}</Text>
-                        </View>
-                    </ScrollView>
+                    </View>
                 </View>
-                <View style={{ flex: 0.07, backgroundColor: 'white', flexDirection: 'row' }}>
+                <View style={{ flex: 0.07, backgroundColor: 'green', flexDirection: 'row' }}>
                     <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }} onPress={() => Linking.openURL(`tel:${'0' + ad.postedBy.contactNumber}`)}>
                             <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>
