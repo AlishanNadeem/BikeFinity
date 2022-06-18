@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LogIn } from '../redux/actions/authAction';
-import { BASE_URL } from '../config';
+import { BASE_URL, SECONDARY_COLOR } from '../config';
 
 const Login = () => {
 
@@ -106,6 +106,7 @@ const Login = () => {
     }
     else if (fieldName === 'password') {
       if (password.length === 0) {
+        setIncorrectPassword(false)
         setEmptyPassword(true)
       }
     }
@@ -192,6 +193,9 @@ const Login = () => {
           {emptyPassword ? <Text style={styles.errorLabel}>Password cannot be empty!</Text> : null}
           {incorrectPassword ? <Text style={[styles.errorLabel, { color: '#dc3545' }]}>Incorrect Password</Text> : null}
         </View>
+      </View>
+      <View style={{ marginTop: 5, alignItems: 'flex-end', justifyContent: 'center' }}>
+        <Text style={{ fontSize: 12, color: SECONDARY_COLOR }} onPress={() => navigation.navigate('ForgotPassword')}>Forgot Password?</Text>
       </View>
       <View style={{ marginTop: 20, height: 60, alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ width: '80%' }}>
