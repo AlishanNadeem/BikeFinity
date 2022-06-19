@@ -7,7 +7,7 @@ exports.postReview = (async (req, res, next) => {
     let review = new Review({
         review: req.body.review,
         rating: req.body.rating,
-        bikeId: req.body.bikeId,
+        bikeId: mongoose.Types.ObjectId(req.body.bikeId),
         userId: req.decoded.id,
     });
 
