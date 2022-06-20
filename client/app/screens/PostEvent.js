@@ -26,6 +26,7 @@ const DATA = [
     {
         id: 3,
         title: "Auto Show",
+        icon: require('../assets/events/calendar.png')
     },
     {
         id: 4,
@@ -40,7 +41,7 @@ const DATA = [
     {
         id: 6,
         title: "Awareness Campaign",
-        // icon: require('../assets/events/awareness.png')
+        icon: require('../assets/events/night-ride.png')
     },
 ];
 

@@ -37,7 +37,7 @@ const DATA = [
     {
         id: 6,
         title: "Awareness Campaign",
-        // icon: require('../assets/events/awareness.png')
+        icon: require('../assets/events/night-ride.png')
     },
 ];
 
