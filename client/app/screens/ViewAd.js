@@ -11,6 +11,7 @@ import Axios from "axios";
 
 import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR } from "../config";
 import DetailCard from "../components/DetailCard";
+import { StatusBar } from "react-native";
 
 //need to loading app loader on start then ad fetched set to false
 const ViewAd = () => {
@@ -87,6 +88,7 @@ const ViewAd = () => {
     return (
         isLoaded ?
             <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <StatusBar translucent={false} />
                 <View style={{ flex: 0.3 }}>
                     <Image source={{ uri: ad.image }} style={{ height: '100%', width: '100%' }} resizeMode='contain' />
                 </View>
@@ -150,7 +152,7 @@ const ViewAd = () => {
                         </View>
                     </View>
                 </View>
-                <View style={{ flex: 0.07, backgroundColor: 'green', flexDirection: 'row' }}>
+                <View style={{ flex: 0.07, flexDirection: 'row' }}>
                     <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }} onPress={() => Linking.openURL(`tel:${'0' + ad.postedBy.contactNumber}`)}>
                             <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>

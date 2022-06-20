@@ -109,7 +109,7 @@ const EditProfile = () => {
     }
 
     return (
-        <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: 20, backgroundColor: 'white' }} enableOnAndroid extraHeight={150}>
+        <KeyboardAwareScrollView style={{ flex: 1, paddingHorizontal: 20, backgroundColor: 'white', minHeight: height }} enableOnAndroid extraHeight={150}>
             <View style={{ height: height * 0.2, justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar
                     rounded

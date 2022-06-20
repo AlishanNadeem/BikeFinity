@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FAB } from 'react-native-paper';
@@ -7,12 +7,13 @@ import moment from 'moment';
 import Axios from 'axios';
 
 import { useSelector } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { BASE_URL, PRIMARY_COLOR, SECONDARY_COLOR } from "../config";
 
-const Marketplace = ({ navigation }) => {
+const Marketplace = () => {
 
+    const navigation = useNavigation();
     const isFocused = useIsFocused();
     const { token, userId } = useSelector(state => state.auth);
 

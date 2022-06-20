@@ -33,7 +33,9 @@ const AuthNavigation = () => {
             <Stack.Screen name="Password" component={Password} options={{ headerShown: true, headerTitle: "" }} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: true, headerTitle: "" }} />
             <Stack.Screen name="ConfirmationCode" component={ConfirmationCode} options={{ headerShown: true, headerTitle: "" }} />
-            <Stack.Screen name="UpdatePassword" component={UpdatePassword} options={{ headerShown: true, headerTitle: "" }} />
+            <Stack.Screen name="UpdatePassword" component={UpdatePassword} options={{
+                headerShown: true, headerTitle: "", headerLeft: null, headerStyle: null
+            }} />
         </Stack.Navigator>
     );
 }

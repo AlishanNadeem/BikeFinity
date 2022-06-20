@@ -9,12 +9,32 @@ import Events from '../screens/Events';
 import Profile from '../screens/Profile';
 import Calculator from '../screens/Calculator';
 import Review from '../screens/Review';
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../config';
+import { View, Image } from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomTabNavigation = () => {
     return (
-        <Tab.Navigator activeColor='#000000' inactiveColor='#FFFFFF' barStyle={{ backgroundColor: '#CA054D' }} >
+        <Tab.Navigator activeColor='#FFFFFF' inactiveColor={PRIMARY_COLOR}
+            barStyle={{
+                backgroundColor: SECONDARY_COLOR,
+                // position: 'absolute',
+                overflow: 'hidden',
+                height: 60,
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 15,
+                shadowOffset: {
+                    width: 0,
+                    height: 12,
+                },
+                shadowOpacity: 0.58,
+                shadowRadius: 16.0,
+                elevation: 24,
+            }}
+            shifting={false}
+        >
+
             <Tab.Screen name="Marketplace" component={Marketplace}
                 options={{
                     tabBarLabel: 'Marketplace',

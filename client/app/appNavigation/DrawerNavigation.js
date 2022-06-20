@@ -39,6 +39,7 @@ const CustomDrawerContent = (props) => {
     const [adsCount, setAdsCount] = useState(0);
     const [eventsCount, setEventsCount] = useState(0);
     const [likedAdsCount, setLikedAdsCount] = useState(0);
+    const [interestedEventsCount, setInterestedEventsCount] = useState(0);
 
     useEffect(() => {
         Axios.get(`${BASE_URL}/bikefinity/user/stats`, {
@@ -49,6 +50,9 @@ const CustomDrawerContent = (props) => {
             .then((res) => {
                 setReviewCount(res.data.reviewCount)
                 setAdsCount(res.data.adsCount)
+                setEventsCount(res.data.eventsCount)
+                setLikedAdsCount(res.data.likedAdsCount)
+                setInterestedEventsCount(res.data.interestedEventsCount)
             })
             .catch((err) => {
                 console.log(err);
@@ -65,7 +69,7 @@ const CustomDrawerContent = (props) => {
                             size={120}
                             source={{ uri: user.profilePicture }}
                         />
-                        <TouchableOpacity style={{height: 20, width: 20, backgroundColor: '#e885a9', borderRadius: 10, position: 'absolute', left: 160, bottom: 5, justifyContent: 'center', alignItems: 'center'}} onPress={() => props.navigation.navigate('EditProfile')}>
+                        <TouchableOpacity style={{ height: 20, width: 20, backgroundColor: '#e885a9', borderRadius: 10, position: 'absolute', left: 160, bottom: 5, justifyContent: 'center', alignItems: 'center' }} onPress={() => props.navigation.navigate('EditProfile')}>
                             <Icon name='pencil' color={'#FFFFFF'} size={14} />
                         </TouchableOpacity>
                     </View>
@@ -74,8 +78,8 @@ const CustomDrawerContent = (props) => {
                         <Text style={{ fontSize: 12 }}>{user.email}</Text>
                     </View>
                 </View>
-                <View style={{ flex: 0.3 }}>
-                    <View style={{ flex: 0.5, flexDirection: 'row' }}>
+                <View style={{ flex: 0.5 }}>
+                    <View style={{ flex: 0.3, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>{reviewCount}</Text>
                             <Text style={{ fontSize: 12, color: 'black' }}>Total Reviews</Text>
@@ -85,7 +89,7 @@ const CustomDrawerContent = (props) => {
                             <Text style={{ fontSize: 12, color: 'black' }}>Total Ads</Text>
                         </View>
                     </View>
-                    <View style={{ flex: 0.5, flexDirection: 'row' }}>
+                    <View style={{ flex: 0.3, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>{eventsCount}</Text>
                             <Text style={{ fontSize: 12, color: 'black' }}>Total Events</Text>
@@ -95,11 +99,17 @@ const CustomDrawerContent = (props) => {
                             <Text style={{ fontSize: 12, color: 'black' }}>Total Liked Ads</Text>
                         </View>
                     </View>
+                    <View style={{ flex: 0.3, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>{interestedEventsCount}</Text>
+                            <Text style={{ fontSize: 12, color: 'black' }}>Interested Events</Text>
+                        </View>
+                    </View>
 
                 </View>
-                <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 16, color: SECONDARY_COLOR }}>CREATE YOUR COMMUNITY</Text>
-                </View>
+                {/* <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}> */}
+                {/* <Text style={{ fontSize: 16, color: SECONDARY_COLOR }}>CREATE YOUR COMMUNITY</Text> */}
+                {/* </View> */}
                 <View style={{ flex: 0.1, justifyContent: 'center' }}>
                     <TouchableOpacity onPress={() => dispatch(LogOut())}>
                         <Button name={'Logout'} outlined />

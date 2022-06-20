@@ -14,7 +14,6 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import Input from '../components/Input';
@@ -98,13 +97,13 @@ const PostAd = () => {
     })
       .then((res) => {
         if (res.status === 200) {
-          setLoading(false);
           Alert.alert(
             'Success!',
             'Ad Posted Successfully'
           )
           navigation.navigate('MyTabs')
         }
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -367,7 +366,7 @@ const PostAd = () => {
       </View>
       <View style={{ marginTop: 5 }}>
         <Text style={{ color: 'black' }}>Choose Image</Text>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <View style={{ marginTop: 15, height: 300, width: 300, borderRadius: 10 }}>
             <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
               onPress={() => {
