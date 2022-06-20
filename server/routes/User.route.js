@@ -34,6 +34,9 @@ router.get('/stats', AuthVerifier, user_controller.stats);
 //edit profile
 router.post('/updateProfile', AuthVerifier, user_controller.updateProfile);
 
+//search
+router.post('/search', user_controller.search);
+
 router.post('/message', user_controller.message);
 
 module.exports = router;

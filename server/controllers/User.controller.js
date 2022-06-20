@@ -2,6 +2,7 @@ const sendMessage = require('../helpers/Twilio');
 const Ads = require('../models/Ads.model');
 const User = require('../models/User.model');
 const Review = require('../models/Review.model');
+const Event = require('../models/Event.model');
 
 exports.postAd = ((req, res, next) => {
     let ad = new Ads({
@@ -88,6 +89,16 @@ exports.unlikeAd = ((req, res, next) => {
     })
 });
 
+exports.search = (async (req, res, next) => {
+    var regex = new RegExp(req.body.title, 'i');
+
+    Ads.find({ title: regex }, (err, ads) => {
+        if (err) return next(err)
+
+        return res.send(ads)
+    })
+})
+
 //update profile
 exports.updateProfile = ((req, res, next) => {
     User.findByIdAndUpdate(req.decoded.id, {
@@ -109,10 +120,27 @@ exports.stats = (async (req, res, next) => {
 
     let adsCount = await Ads.find({ postedBy: req.decoded.id });
 
+    let eventsCount = await Event.find({ hostedBy: req.decoded.id });
+
+    let interestedEventsCount = await Event.find({
+        interested: {
+            $in: [req.decoded.id]
+        }
+    })
+
+    let likedAdsCount = await Ads.find({
+        likedBy: {
+            $in: [req.decoded.id]
+        }
+    })
+
 
     res.send({
         reviewCount: reviewCount.length,
-        adsCount: adsCount.length
+        adsCount: adsCount.length,
+        eventsCount: eventsCount.length,
+        interestedEventsCount: interestedEventsCount.length,
+        likedAdsCount: likedAdsCount.length
     })
 
 });

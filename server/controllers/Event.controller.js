@@ -2,29 +2,71 @@ const Event = require('../models/Event.model');
 
 exports.getEvents = (async (req, res, next) => {
 
-    const { status } = req.query;
+    const events = await Event.find();
 
-    Event.find({ status: status }, (err, events) => {
-        if (err) return next(err)
+    return res.send(events)
+})
 
-        res.send(events)
-    });
+exports.getEventsByType = (async (req, res, next) => {
+    const { type } = req.query;
+
+    const events = await Event.find({ type: type });
+
+    return res.send(events)
+})
+
+exports.getEventsById = (async (req, res, next) => {
+
+    const event = await Event.findById(req.params.id);
+
+    return res.send(event)
 })
 
 exports.postEvent = (async (req, res, next) => {
-
     let event = new Event({
+        type: req.body.type,
         title: req.body.title,
         venue: req.body.venue,
         date: req.body.date,
         description: req.body.description,
+        image: req.body.image,
         hostedBy: req.decoded.id
     })
 
     event.save((err) => {
-        if (err) return next(err);
 
-        res.send("Event posted successfully")
+        if (err) {
+            console.log(err)
+        }
+
+        return res.send("Event posted successfully")
     })
 
+});
+
+exports.interestedEvent = ((req, res, next) => {
+    Event.findByIdAndUpdate(req.body.id, {
+        $push: {
+            interested: req.decoded.id
+        }
+    }, {
+        new: true
+    }, (err, event) => {
+        if (err) return next(err)
+
+        res.send(event)
+    })
+});
+
+exports.notInterestedEvent = ((req, res, next) => {
+    Event.findByIdAndUpdate(req.body.id, {
+        $pull: {
+            interested: req.decoded.id
+        }
+    }, {
+        new: true
+    }, (err, event) => {
+        if (err) return next(err)
+        res.send(event)
+    })
 });
