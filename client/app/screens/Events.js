@@ -12,7 +12,7 @@ const DATA = [
     {
         id: 1,
         title: "Drag Racing",
-        icon: require('../assets/events/drag-race.png')
+        icon: require('../assets/events/bike-reveal.png')
     },
     {
         id: 2,

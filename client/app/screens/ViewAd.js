@@ -153,17 +153,17 @@ const ViewAd = () => {
                     </View>
                 </View>
                 <View style={{ flex: 0.07, flexDirection: 'row' }}>
-                    <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flex: 1, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5 }} onPress={() => Linking.openURL(`tel:${'0' + ad.postedBy.contactNumber}`)}>
                             <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center' }}>
                                 <Icon name="phone" color='white' size={22} />
                             </View>
-                            <View style={{ flex: 0.75, justifyContent: 'center' }}>
+                            <View style={{ flex: 0.75, justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ color: 'white', fontSize: 18 }}>Call</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
+                    {/* <View style={{ flex: 0.5, padding: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', backgroundColor: '#011627', width: '90%', height: 40, borderRadius: 5, justifyContent: 'center' }}>
                             <View style={{ flex: 0.3, justifyContent: 'center' }}>
                                 <Icon name="message" color='white' size={22} />
@@ -172,7 +172,7 @@ const ViewAd = () => {
                                 <Text style={{ color: 'white', fontSize: 18 }}>SMS</Text>
                             </View>
                         </View>
-                    </View>
+                    </View> */}
                 </View>
             </View> :
             <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>

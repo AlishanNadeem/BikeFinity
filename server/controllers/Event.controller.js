@@ -23,25 +23,36 @@ exports.getEventsById = (async (req, res, next) => {
 })
 
 exports.postEvent = (async (req, res, next) => {
-    let event = new Event({
-        type: req.body.type,
-        title: req.body.title,
-        venue: req.body.venue,
-        date: req.body.date,
-        description: req.body.description,
-        image: req.body.image,
-        hostedBy: req.decoded.id
-    })
 
-    event.save((err) => {
+    let eventsRecord = await Event.find();
 
-        if (err) {
-            console.log(err)
+    console.log(eventsRecord);
+
+    for (var i = 0; i < eventsRecord.length; i++) {
+        console.log("check", eventsRecord[i].date)
+        if (eventsRecord[i].date === req.body.date) {
+            return res.send("Slot already booked")
+        } else {
+            let event = new Event({
+                type: req.body.type,
+                title: req.body.title,
+                venue: req.body.venue,
+                date: req.body.date,
+                description: req.body.description,
+                image: req.body.image,
+                hostedBy: req.decoded.id
+            })
+
+            event.save((err) => {
+
+                if (err) {
+                    console.log(err)
+                }
+
+                return res.send("Event posted successfully")
+            })
         }
-
-        return res.send("Event posted successfully")
-    })
-
+    }
 });
 
 exports.interestedEvent = ((req, res, next) => {
