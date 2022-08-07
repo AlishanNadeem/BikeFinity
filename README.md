@@ -15,6 +15,10 @@ Our repo contains two sub-folders i.e client and server.
 
 ## Installing the app
 
+### Prerequisite
+
+You should have Node installed. Also React Native environment should be configured. All environmental variable must be initialized properly. You should have either ios or android device or emulator to run this application.
+
 First you have to take pull of this repo by using
 ```sh
 https://github.com/AlishanNadeem/BikeFinity.git
