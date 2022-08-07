@@ -70,6 +70,21 @@ If you want to run the application on iOS use this command:
 npx react-native run-ios
 ```
 
+## Generate APK of Mobile Application
+
+1. First, open up your project or application on android studio that you want to import into an APK file.
+2. Open the Build menu from the toolbar and select Generate Signed Bundle/APK.
+3. This opens up a screen where you have to select between creating an Android App Bundle and creating an APK file. 
+   Check the APK radio button and proceed to the next window.
+4. You’ll be asked about your Key store path, Key store password, Key alias, and the Key password.
+5. Key Store Path: Project Android Folder.
+6. Key Store Password: android
+7. Key Alias: key0
+8. Key Password: android
+9. Select OK. You will then be directed back to the Generate Signed Bundle or APK screen.
+10. Select Release and click on Finish.
+11. You'll find the apk here (.../YourProject/app/build/outputs/apk/app-debug.apk)
+
 ## Authors
 
 Alishan Nadeem - 1812102
